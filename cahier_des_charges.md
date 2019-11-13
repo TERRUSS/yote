@@ -33,12 +33,30 @@
 + Modèle
   
   - random.c
+    
+    + flip_coin
+    
+    + srand
   
   - gamplay.c
+    
+    + allow_mouv
+    
+    + allow_case
+    
+    + setup_pawn
+    
+    + take_pawn
+    
+    + mouv_res_to_board
   
   - clic.c
+    
+    + case_to_coord
   
   - save_load.c
+    
+    + 
 
 + Vue
   
@@ -53,13 +71,21 @@
 + Controlleur
   
   - main.c
+    
+    + main
   
   - menu.c
+    
+    + menu
+    
+    + choice
   
   - game.c
-  
-  
+    
+    + game
+      
+      
 
-
+## 
 
 
