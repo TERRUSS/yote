@@ -4,7 +4,7 @@ void print_pawn(SDL_Window* pWindow){
 	SDL_Renderer *pRenderer = SDL_CreateRenderer(pWindow,-1,SDL_RENDERER_ACCELERATED); // Création d'un SDL_Renderer utilisant l'accélération matérielle
 
 	if ( pRenderer ) {
-		SDL_Surface* pSprite = SDL_LoadBMP("../assets/block/block.bmp");
+		SDL_Surface* pSprite = SDL_LoadBMP("./assets/block/block.bmp");
 
 		if ( pSprite ) {
 			SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer,pSprite); // Préparation du sprite
@@ -29,7 +29,7 @@ void print_pawn(SDL_Window* pWindow){
 		}
 		
 		SDL_DestroyRenderer(pRenderer); // Libération de la mémoire du SDL_Renderer
-		
+
 	} else {
 		fprintf(stdout,"Échec de création du renderer (%s)\n",SDL_GetError());
 	}
