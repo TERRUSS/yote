@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall
-LIBS=-lSDL2
+LIBS=-lSDL2 -lSDL2_image
 FILES=main.c vue/game.c
 HEADERS=header.h vue/header.h
 DIR=build
@@ -26,6 +26,6 @@ clean:
 	rm -f *core
 	rm -f *.o
 	rm -f lib/police.h
-	rm -f main
+	rm -f yote
 	rm -f *.tar
 	rm -rf $(DIR)
