@@ -1,6 +1,6 @@
 #include "header.h"
 
-void print_pawn(){
+void print_pawn(SDL_Window* pWindow){
 	SDL_Renderer *pRenderer = SDL_CreateRenderer(pWindow,-1,SDL_RENDERER_ACCELERATED); // Création d'un SDL_Renderer utilisant l'accélération matérielle
 	if ( pRenderer )
 	{

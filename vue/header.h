@@ -4,5 +4,5 @@
 #include <stdio.h>
 #include <stdlib.h>
 
- void print_pawn(void);
+ void print_pawn(SDL_Window*);
  

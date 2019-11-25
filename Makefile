@@ -5,14 +5,9 @@ FILES=main.c vue/game.c
 HEADERS=header.h vue/header.h
 DIR=build
 
-#Cible generique pour Linux
-%: %.c
-	rm -f $@
-	$(CC) $(CFLAGS) graphics.o $@.c -o $@ $(LIBS)
 
-
-main: main.c graphics.o $(FILES) $(HEADERS)
-	$(CC) $(CFLAGS) graphics.o main.c $(FILES) -o main $(LIBS)
+yote: $(FILES) $(HEADERS)
+	$(CC) $(CFLAGS) $(FILES) -o yote $(LIBS)
 
 tar: clean
 	rm -rf $(DIR)
