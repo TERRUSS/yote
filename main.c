@@ -3,18 +3,17 @@
 
 int main(void) {
 
-  SDL_Window* window = 0;
+  //axe(x) & axe(y)
+  int plateau[6][5] = {0};
 
-  if(SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        SDL_Quit();
-        return -1;
-    }
+  IGE_init();
 
-  window = SDL_CreateWindow("Yoté", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
-  print_pawn(window);
+  IGE_displayBoard((int*)plateau, 6, 5);
 
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+  IGE_render();
+  SDL_Delay(5000);
+
+  IGE_quit();
+
   return 0;
 }
