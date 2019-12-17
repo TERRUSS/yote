@@ -23,13 +23,19 @@ int main(int argc, char** argv)
 		SDL_Surface* pGamebg= SDL_LoadBMP("/home/user/yote/assets/graphics/board.bmp");
 		SDL_Surface* redpawn= SDL_LoadBMP("/home/user/yote/assets/graphics/pionrouge.bmp");
 		SDL_Surface* whitepawn= SDL_LoadBMP("/home/user/yote/assets/graphics/pionwhite.bmp");
+		SDL_Surface* jaugered= SDL_LoadBMP("/home/user/yote/assets/graphics/jaugered.bmp");
+		SDL_Surface* jaugewhite= SDL_LoadBMP("/home/user/yote/assets/graphics/jaugewhite.bmp");
+		
 		if ( pGamebg )
 		{
 			//Positionnement de plateau
 			SDL_Rect dest = { 780/2 - pGamebg->w/2,520/2 - pGamebg->h/2, 0, 0};
 			SDL_BlitSurface(pGamebg,NULL,SDL_GetWindowSurface(pWindow),&dest); 
+			SDL_Rect destJsRed = {14,10, 0, 0};
+			SDL_Rect destJswhite = { 750,346, 0, 0};
+			SDL_BlitSurface(jaugered,NULL,SDL_GetWindowSurface(pWindow),&destJsRed); 
+			SDL_BlitSurface(jaugewhite,NULL,SDL_GetWindowSurface(pWindow),&destJswhite); 
 			//Positionnement de la reserve
-			
 			for(i=0;i<12;i++)
 			{
 			SDL_Rect destpawnr = { pospawnx,pospawny, 0, 0};
@@ -65,8 +71,12 @@ int main(int argc, char** argv)
 					}
 				}
 			}
-			
-		SDL_FreeSurface(pGamebg); // Libération de la ressource occupée par le sprite
+		// Libération de la ressource occupée par le sprite	
+		SDL_FreeSurface(pGamebg);
+		SDL_FreeSurface(redpawn);
+		SDL_FreeSurface(whitepawn);
+		SDL_FreeSurface(jaugered);
+		SDL_FreeSurface(jaugewhite);
 		}
 		else
 		{
