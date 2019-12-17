@@ -7,6 +7,11 @@ int main(int argc, char** argv)
 	SDL_Window* pWindow = NULL;
 	SDL_Event event;
 	int cont=1;
+	int i;
+	int pospawnx = 95;
+	int pospawny = 170;
+	int pospawnxb = 642;
+	int pospawnyb = 334;
 	pWindow = SDL_CreateWindow("YOTE",SDL_WINDOWPOS_UNDEFINED,
 															  SDL_WINDOWPOS_UNDEFINED,
 															  780,
@@ -15,12 +20,29 @@ int main(int argc, char** argv)
 
 	if( pWindow )
 	{
-		SDL_Surface* pSprite = SDL_LoadBMP("board.bmp");
-		if ( pSprite )
+		SDL_Surface* pGamebg= SDL_LoadBMP("/home/user/yote/assets/graphics/board.bmp");
+		SDL_Surface* redpawn= SDL_LoadBMP("/home/user/yote/assets/graphics/pionrouge.bmp");
+		SDL_Surface* whitepawn= SDL_LoadBMP("/home/user/yote/assets/graphics/pionwhite.bmp");
+		if ( pGamebg )
 		{
 			//Positionnement de plateau
-			SDL_Rect dest = { 780/2 - pSprite->w/2,520/2 - pSprite->h/2, 0, 0};
-			SDL_BlitSurface(pSprite,NULL,SDL_GetWindowSurface(pWindow),&dest); 
+			SDL_Rect dest = { 780/2 - pGamebg->w/2,520/2 - pGamebg->h/2, 0, 0};
+			SDL_BlitSurface(pGamebg,NULL,SDL_GetWindowSurface(pWindow),&dest); 
+			//Positionnement de la reserve
+			
+			for(i=0;i<12;i++)
+			{
+			SDL_Rect destpawnr = { pospawnx,pospawny, 0, 0};
+			SDL_Rect destpawnb = { pospawnxb,pospawnyb, 0, 0};
+			SDL_BlitSurface(redpawn,NULL,SDL_GetWindowSurface(pWindow),&destpawnr);
+			SDL_BlitSurface(whitepawn,NULL,SDL_GetWindowSurface(pWindow),&destpawnb);
+			pospawnx=(pospawnx+20);
+			pospawny=(pospawny-10); 
+			pospawnxb=(pospawnxb-20);
+			pospawnyb=(pospawnyb+10); 
+			
+			}
+			
 			SDL_UpdateWindowSurface(pWindow); // Mise à jour de la fenêtre 
 			
 			 while ( cont != 0 )
@@ -44,7 +66,7 @@ int main(int argc, char** argv)
 				}
 			}
 			
-		SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
+		SDL_FreeSurface(pGamebg); // Libération de la ressource occupée par le sprite
 		}
 		else
 		{
