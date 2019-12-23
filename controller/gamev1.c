@@ -2,81 +2,130 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
+typedef struct
+{
+	SDL_Surface* image;
+	SDL_Rect position;
+}img; //les pions,le plateau ect sont des objets de type image
+
+#define TAILLE_OBJ 5
+
+//fct ou on va load toutes les images d'objets
+void load_objects(img* TabObj)
+{
+	TabObj[0].image = SDL_LoadBMP("/home/user/yote/assets/graphics/board.bmp");      //0:fond
+	TabObj[1].image = SDL_LoadBMP("/home/user/yote/assets/graphics/pionrouge.bmp");  //1:pion rouge
+	TabObj[2].image = SDL_LoadBMP("/home/user/yote/assets/graphics/pionwhite.bmp");  //2:pion blanc
+	TabObj[3].image = SDL_LoadBMP("/home/user/yote/assets/graphics/jaugered.bmp");   //3:Jauge score rouge
+	TabObj[4].image = SDL_LoadBMP("/home/user/yote/assets/graphics/jaugewhite.bmp"); //4:Jauge score blanche
+}
+// init les positions des objects
+void init_pos_objects(img* TabObj)
+{
+    TabObj[0].position.x= 780/2 - TabObj[0].image->w/2;         //bg
+    TabObj[0].position.y=520/2 - TabObj[0].image->h/2 ;						  
+	TabObj[3].position.x=14;                                    //JAUGE SCORE ROUGE
+	TabObj[3].position.y=10;
+	TabObj[4].position.x=750;							        //Jauge score blanc
+	TabObj[4].position.y=346;
+}
+//fct ou on va faire les blit 
+void print_objects(img* TabObj,SDL_Rect* tabRed,SDL_Rect* tabWhite,SDL_Window* pWindow)
+{
+	int i;
+	SDL_BlitSurface(TabObj[0].image,NULL,SDL_GetWindowSurface(pWindow),&(TabObj[0].position)); 
+	SDL_BlitSurface(TabObj[3].image,NULL,SDL_GetWindowSurface(pWindow),&(TabObj[3].position)); 
+	SDL_BlitSurface(TabObj[4].image,NULL,SDL_GetWindowSurface(pWindow),&(TabObj[4].position)); 
+	//affichage de la reserve
+	for(i=0;i<12;i++)
+	{ 				
+		SDL_BlitSurface(TabObj[1].image,NULL,SDL_GetWindowSurface(pWindow),&(tabRed[i]));
+		SDL_BlitSurface(TabObj[2].image,NULL,SDL_GetWindowSurface(pWindow),&(tabWhite[i]));
+	}
+}
+
+//tableau qui contient les pos init des pions(reserve)
+void init_pos_reserve(SDL_Rect* reserveR,SDL_Rect* reserveW)
+{
+	int i;
+	
+	reserveR[0].x = 95; // pos du premier pion de la reserve rouge
+    reserveR[0].y = 170; 
+    reserveW[0].x = 642;// pos du premier pion de la reserve blanche
+    reserveW[0].y = 334;
+
+	for(i=1;i<12;i++) //pos reste des pions
+	{
+		reserveR[i].x=reserveR[i-1].x+20;
+		reserveR[i].y=reserveR[i-1].y-10;
+		reserveW[i].x=reserveW[i-1].x-20;
+		reserveW[i].y=reserveW[i-1].y+10; 
+		fprintf(stdout, "%d,%d\n",reserveW[i].x,reserveW[i].y);
+	}
+}
+void liberation_memoire(img* TabObj)
+{
+	int i;
+	for (i=0;i<TAILLE_OBJ;i++)
+	{
+		SDL_FreeSurface(TabObj[i].image);
+	}
+}
+
 int main(int argc, char** argv)
 {
 	SDL_Window* pWindow = NULL;
 	SDL_Event event;
 	int cont=1;
-	int i;
-	int pospawnx = 95;
-	int pospawny = 170;
-	int pospawnxb = 642;
-	int pospawnyb = 334;
-	pWindow = SDL_CreateWindow("YOTE",SDL_WINDOWPOS_UNDEFINED,
+	SDL_Rect tabRed[12];        //tableau contenant tt les pions rouges
+	SDL_Rect tabWhite[12];		//tableau contenant tt les pions blancs
+	img tobjects[TAILLE_OBJ];   //tab contenant tt les objets
+	//objects
+	img pGamebg;                //fond
+	
+	int xmouse=0;               //coordonées de la souris
+	int ymouse=0;
+	Uint32 boutons = SDL_GetMouseState(&xmouse,&ymouse);
+
+	//init fenetre
+ 	pWindow = SDL_CreateWindow("YOTE",SDL_WINDOWPOS_UNDEFINED,
 															  SDL_WINDOWPOS_UNDEFINED,
 															  780,
 															  520,
 															  SDL_WINDOW_SHOWN);
 
 	if( pWindow )
-	{
-		SDL_Surface* pGamebg= SDL_LoadBMP("/home/user/yote/assets/graphics/board.bmp");
-		SDL_Surface* redpawn= SDL_LoadBMP("/home/user/yote/assets/graphics/pionrouge.bmp");
-		SDL_Surface* whitepawn= SDL_LoadBMP("/home/user/yote/assets/graphics/pionwhite.bmp");
-		SDL_Surface* jaugered= SDL_LoadBMP("/home/user/yote/assets/graphics/jaugered.bmp");
-		SDL_Surface* jaugewhite= SDL_LoadBMP("/home/user/yote/assets/graphics/jaugewhite.bmp");
-		
-		if ( pGamebg )
+	{   //Initialisations
+		load_objects(tobjects);
+		init_pos_objects(tobjects);
+		pGamebg= tobjects[0];
+		init_pos_reserve(tabRed,tabWhite);
+
+		if ( pGamebg.image )
 		{
-			//Positionnement de plateau
-			SDL_Rect dest = { 780/2 - pGamebg->w/2,520/2 - pGamebg->h/2, 0, 0};
-			SDL_BlitSurface(pGamebg,NULL,SDL_GetWindowSurface(pWindow),&dest); 
-			SDL_Rect destJsRed = {14,10, 0, 0};
-			SDL_Rect destJswhite = { 750,346, 0, 0};
-			SDL_BlitSurface(jaugered,NULL,SDL_GetWindowSurface(pWindow),&destJsRed); 
-			SDL_BlitSurface(jaugewhite,NULL,SDL_GetWindowSurface(pWindow),&destJswhite); 
-			//Positionnement de la reserve
-			for(i=0;i<12;i++)
+			print_objects(tobjects,tabRed,tabWhite,pWindow);
+			SDL_UpdateWindowSurface(pWindow);					 // Mise à jour de la fenêtre 
+			 //On rentre dans la gestion des events
+			while ( cont != 0 )									
 			{
-			SDL_Rect destpawnr = { pospawnx,pospawny, 0, 0};
-			SDL_Rect destpawnb = { pospawnxb,pospawnyb, 0, 0};
-			SDL_BlitSurface(redpawn,NULL,SDL_GetWindowSurface(pWindow),&destpawnr);
-			SDL_BlitSurface(whitepawn,NULL,SDL_GetWindowSurface(pWindow),&destpawnb);
-			pospawnx=(pospawnx+20);
-			pospawny=(pospawny-10); 
-			pospawnxb=(pospawnxb-20);
-			pospawnyb=(pospawnyb+10); 
-			
-			}
-			
-			SDL_UpdateWindowSurface(pWindow); // Mise à jour de la fenêtre 
-			
-			 while ( cont != 0 )
-			{
+				//SDL_PumpEvents();
 				while ( SDL_PollEvent(&event) )
 				{
-					/* Traitement de l'événement */
 					switch (event.type) 
 					{
 						case SDL_QUIT: // Clic sur la croix
 						cont = 0;
 						break;
 						case SDL_KEYDOWN:
-					  
 							if ( event.key.keysym.scancode == SDL_SCANCODE_ESCAPE )
 							{
 								cont = 0;
 							}
-							break;
+						break;
 					}
 				}
 			}
-		// Libération de la ressource occupée par le sprite	
-		SDL_FreeSurface(pGamebg);
-		SDL_FreeSurface(redpawn);
-		SDL_FreeSurface(whitepawn);
-		SDL_FreeSurface(jaugered);
-		SDL_FreeSurface(jaugewhite);
+			liberation_memoire(tobjects);
 		}
 		else
 		{
