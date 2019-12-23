@@ -8,7 +8,11 @@ typedef struct
 	SDL_Rect position;
 }img; //les pions,le plateau ect sont des objets de type image
 
-#define TAILLE_OBJ 5
+#define TAILLE_OBJ 5 //nbr d'images qu'on a 
+
+typedef int bool ;  //définition du type booléen,
+#define false  0 /* affectation des valeurs conventionnelles*/,
+#define true  1.
 
 //fct ou on va load toutes les images d'objets
 void load_objects(img* TabObj)
@@ -18,6 +22,8 @@ void load_objects(img* TabObj)
 	TabObj[2].image = SDL_LoadBMP("/home/user/yote/assets/graphics/pionwhite.bmp");  //2:pion blanc
 	TabObj[3].image = SDL_LoadBMP("/home/user/yote/assets/graphics/jaugered.bmp");   //3:Jauge score rouge
 	TabObj[4].image = SDL_LoadBMP("/home/user/yote/assets/graphics/jaugewhite.bmp"); //4:Jauge score blanche
+	TabObj[4].image = SDL_LoadBMP("/home/user/yote/assets/graphics/jaugewhite.bmp"); //4:Jauge score blanche
+	TabObj[5].image = SDL_LoadBMP("/home/user/yote/assets/graphics/lightredpawn.bmp"); //5:pion rouge highlighté 
 }
 // init les positions des objects
 void init_pos_objects(img* TabObj)
@@ -60,9 +66,24 @@ void init_pos_reserve(SDL_Rect* reserveR,SDL_Rect* reserveW)
 		reserveR[i].y=reserveR[i-1].y-10;
 		reserveW[i].x=reserveW[i-1].x-20;
 		reserveW[i].y=reserveW[i-1].y+10; 
-		fprintf(stdout, "%d,%d\n",reserveW[i].x,reserveW[i].y);
 	}
 }
+
+bool verif_mouse_pawn(int xmouse,int ymouse,SDL_Rect* tab) //verif si le cruseur est sur un pion 
+{ 
+	bool verif = 0;
+	int i;
+	for(i=0;i<12;i++)
+	{
+		if ((xmouse > tab[i].x && xmouse < tab[i].x+50) && (ymouse > tab[i].y && ymouse < tab[i].y+50))
+		{
+			//fprintf(stdout,"dessus!!\n");
+			verif=true;
+		}
+	}
+	return verif;
+}
+
 void liberation_memoire(img* TabObj)
 {
 	int i;
@@ -82,10 +103,6 @@ int main(int argc, char** argv)
 	img tobjects[TAILLE_OBJ];   //tab contenant tt les objets
 	//objects
 	img pGamebg;                //fond
-	
-	int xmouse=0;               //coordonées de la souris
-	int ymouse=0;
-	Uint32 boutons = SDL_GetMouseState(&xmouse,&ymouse);
 
 	//init fenetre
  	pWindow = SDL_CreateWindow("YOTE",SDL_WINDOWPOS_UNDEFINED,
@@ -100,15 +117,26 @@ int main(int argc, char** argv)
 		init_pos_objects(tobjects);
 		pGamebg= tobjects[0];
 		init_pos_reserve(tabRed,tabWhite);
-
+		//determination de la surface de la reserve 
 		if ( pGamebg.image )
 		{
 			print_objects(tobjects,tabRed,tabWhite,pWindow);
 			SDL_UpdateWindowSurface(pWindow);					 // Mise à jour de la fenêtre 
-			 //On rentre dans la gestion des events
+
 			while ( cont != 0 )									
 			{
-				//SDL_PumpEvents();
+				int xmouse=0;                  						  //coordonées de la souris
+				int ymouse=0;
+				Uint32 boutons = SDL_GetMouseState(&xmouse,&ymouse);
+				if (verif_mouse_pawn(xmouse,ymouse,tabRed)==true && boutons==1)
+				{
+					printf("t'as selectionné un pion rouge\n");
+				}
+				if (verif_mouse_pawn(xmouse,ymouse,tabWhite)==true && boutons==1)
+				{
+					printf("t'as selectionné un pion blanc\n");
+				}
+				
 				while ( SDL_PollEvent(&event) )
 				{
 					switch (event.type) 
