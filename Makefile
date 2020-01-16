@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-Wall
-LIBS=-lSDL2 -lSDL2_image
-FILES=main.c vue/game.c
-HEADERS=header.h vue/header.h
+LIBS=-lSDL2 -lSDL2_image -lm
+FILES=src/main.c src/vue/graphics.c src/utils/utils.c src/model/game.c
+HEADERS=src/main.h src/vue/graphics.h src/utils/utils.h src/model/game.h
 DIR=build
 
 

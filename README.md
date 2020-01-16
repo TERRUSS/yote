@@ -4,98 +4,27 @@
 
 ---
 
-# <u>Yote - CC</u>
+## Build instructions
 
-## <u>Structures</u>
+### on Linux (Debian based disto) :
 
-+ Joueur
-  
-  - Pions [12]
-  
-  - Point
-  
-  - Id
+```bash
+$ # install dependencies
+$ sudo apt install libsdl2-dev libsdl2-image-dev
+$ # clone & build
+$ git install "https://github.com/TERRUSS/yote" && cd yote && make
+$ # exectutable is now at ./yote
+```
 
-+ Pions
-  
-  - Positions
-  
-  - Etats (Plateaux, res, mort)
+### Dependencies :
 
-+ Positions
-  
-  - colonne
-  
-  - ligne
-
-+ Case
-  
-  - Etats
-  
-  - Positions
-
-## <u>Répertoires</u>
-
-+ Modèle
-  
-  - random.c
-    
-    + flip_coin
-    
-    + srand
-  
-  - gamplay.c
-    
-    + allow_mouv
-    
-    + allow_case
-    
-    + setup_pawn
-    
-    + take_pawn
-    
-    + mouv_res_to_board
-  
-  - clic.c
-    
-    + case_to_coord
-    
-    + coord_to_case
-  
-  - save_load.c
-    
-    + 
-
-+ Vue
-  
-  - menu_view.c
-  
-  - game_view.c
-  
-  - random_view.c
-  
-  - score_view.c
-
-+ Controlleur
-  
-  - main.c
-    
-    + main
-  
-  - menu.c
-    
-    + menu
-    
-    + choice
-  
-  - game.c
-    
-    + game
+  - SDL2, SDL2-image
+  - git, make
 
 ---
 
-## <u>Idea :</u>
+## Idea :
 
-musique-[https://www.youtube.com/watch?v=w9EJrA0hXj4](https://www.youtube.com/watch?v=w9EJrA0hXj4)
+music [https://www.youtube.com/watch?v=w9EJrA0hXj4](https://www.youtube.com/watch?v=w9EJrA0hXj4)
 
 ---
