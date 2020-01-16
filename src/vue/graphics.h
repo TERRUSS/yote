@@ -2,14 +2,20 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "utils.h"
 #include "../utils/utils.h"
 #include "../model/game.h"
 
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
-#define SPRITE_WIDTH 100
-#define SPRITE_HEIGHT 60
+#define MARGE_TOP 50
+#define MARGE_LEFT WINDOW_HEIGHT/1.5
+#define SPRITE_WIDTH 70
+#define SPRITE_HEIGHT 70
+
+#define HIT_BOX_WIDTH 30.84
+#define HIT_BOX_HEIGHT 30.84
 
 SDL_Window* window;
 SDL_Surface* cell_sprite_blue;
@@ -24,8 +30,8 @@ void quitGraphics();
 void render();
 
 /*--------- PRINTING FUNCTIONS ----------*/
-void print_board_cell(int color, int x, int y);
-void print_pawn(int color, int x, int y);
+void print_board_cell(int color, Point pt);
+void print_pawn(int color, Point pt);
 void displayBoard(Game * game);
 void backgroundColor(int r, int g, int b);
 void updateBoard(Game * game);

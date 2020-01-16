@@ -1,13 +1,15 @@
-#include "input.h"
+#include "inputs.h"
 #include <stdio.h>
 
 
-void handleInputs(Game * game){
+int handleInputs(Game * game){
 
 	int quit = 0;
 	int x, y;
 
-	SDL_PollEvent(&event);
+	SDL_Event event;
+
+	SDL_WaitEvent(&event);
 
 	switch (event.type) {
 		case SDL_WINDOWEVENT:
@@ -15,17 +17,17 @@ void handleInputs(Game * game){
 				quit = 1;
 			}
 			break;
-		case SDL_KEYDOWN:
+		case SDL_KEYUP:
 			if ( event.key.keysym.sym == SDLK_ESCAPE ) {
 				quit = 1;
 			}
 			break;
-		default:
+		case SDL_MOUSEBUTTONDOWN:
 			if ( SDL_GetMouseState(&x, &y) & SDL_BUTTON(1) ) {
 				Point click;
 				click.x = x; click.y = y;
 
-				handleClick(Point click);
+				handleClick(click);
 			}
 	}
 
@@ -33,9 +35,48 @@ void handleInputs(Game * game){
 }
 
 
-void handleClick(Point click){
+Point handleClick(Point click){
 
-	Point coords = getCellCoordinates( isoToCart(click) );
-	printf("click @[%d, %d]", coords.x, coords.y);
+	Point coords = isoToCart(click);
+
+	printf("case @[%d, %d]  ", coords.x, coords.y);
+	printf("click @[%d, %d]\n", click.x, click.y);
+
+	return coords;
+}
+
+void mouvPawn(Game * game){
+
+	Point click;
+    Point point;
+    Point position;
+
+    //select pawn of the right color
+	do {
+		position=handleClick(click);
+	} while(((game->white.playing==1)&&(game->board[position.x][position.y].color==WHITE))||((game->black.playing==1)&&(game->board[position.x][position.y].color==BLACK)));
+
+    //select the next mouv
+	do{
+		point=handleClick(click);
+	}while((point.x==position.x+1)||(point.x==position.x-1)||(point.y==position.y+1)||(point.y==position.y-1));
+
+    if(game->board[point.x][point.y].state==EMPTY){
+		position.x=point.x;
+		position.y=point.y;
+    }else{
+		if ((position.x == point.x && position.y >= point.y)&&(game->board[point.x][point.y-2].state==EMPTY)) {
+			position.y=position.y-2;
+		}else if((position.x == point.x && position.y <= point.y)&&(game->board[point.x][point.y+2].state==FILL)) {
+			position.y=position.y+2;
+		}else if((position.y == point.y && position.x >= point.x)&&(game->board[point.x-2][point.y].state==FILL)) {
+			position.x=position.x-2;
+		}else if((position.y == point.y && position.x <= point.x)&&(game->board[point.x+2][point.y].state==FILL)) {
+			position.x=position.x+2;
+		}
+    }
+}
+
+void stockToBoard(Game * game){
 
 }

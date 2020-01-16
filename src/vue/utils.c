@@ -3,13 +3,12 @@
 /*
 *	Convert an isometric point to cartesian
 **/
-Point isoToCart (Point pt) {
-	//gx=(2*isoy+isox)/2;
-	//gy=(2*isoy-isox)/2
+Point isoToCart(Point pt) {
+
 	Point tempPt;
 
-	tempPt.x=(2*pt.y+pt.x)/2;
-	tempPt.y=(2*pt.y-pt.x)/2;
+	tempPt.x = ((MARGE_LEFT+((pt.x) * cos(3*M_PI /4))) / 30)-3;
+	tempPt.y = -(MARGE_TOP-((pt.y) * sin(3*M_PI /4)))/ 30;
 
 	return tempPt;
 }
@@ -18,26 +17,26 @@ Point isoToCart (Point pt) {
 /**
 * Convert a catesian point to isometric
 * */
-Point cartToIso (Point pt) {
+Point cartToIso(Point pt) {
 	//gx=(isox-isoxy;
 	//gy=(isoy+isox)/2
 	Point tempPt;
 
-	tempPt.x=pt.x-pt.y;
-	tempPt.y=(pt.x+pt.y)/2;
-	return tempPt;
-}
+	// tempPt.x=pt.x-pt.y;
+	// tempPt.y=(pt.x+pt.y)/2;
+
+	//truc de maxime qui peu marcher mais faut tatoner
+	// tempPt.x = MARGE_LEFT-( (pt.x / cos(3*M_PI /4))* 30 + (SPRITE_WIDTH/2)*pt.y);
+	// tempPt.y = MARGE_TOP+( (pt.y / sin(3*M_PI /4))* 15 + (SPRITE_HEIGHT/2)*pt.x);
+
+	tempPt.x = MARGE_LEFT + (pt.x+pt.y) * HIT_BOX_WIDTH;
+	tempPt.y = MARGE_TOP - (pt.y-pt.x) * HIT_BOX_HEIGHT;
 
 
-/**
-* Convert a cartesian point to specific tile row/column
-* */
-Point getTileCoordinates(Point pt, int cellHeight) {
 
-	Point tempPt;
 
-	tempPt.x = pt.x/cellHeight;
-	tempPt.y = pt.y/cellWidth;
+	//tempPt.x = MARGE_LEFT-(SPRITE_HEIGHT* pt.y /1.18- SPRITE_HEIGHT* pt.x /1.3 );
+	//tempPt.y = MARGE_TOP+(SPRITE_WIDTH* pt.x /2.5 + pt.y*SPRITE_WIDTH/2.9);
 
 	return tempPt;
 }

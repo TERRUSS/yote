@@ -68,17 +68,18 @@ void displayBoard(Game * game){
 
 	printLog(LOGGING_TASK, "Displaying Board");
 
-	int x, y;
-
+	Point pt;
 	for (int r = 0; r < CELL_R; r++) {
 		for (int c = 0; c < CELL_C; c++) {
-			x = WINDOW_HEIGHT*1/2-(SPRITE_HEIGHT*r/1.6 - SPRITE_HEIGHT*c/1.5 );
-			y = (SPRITE_WIDTH*c/2 + r*SPRITE_WIDTH/2);
-			print_board_cell( ((r+c)%2) ? WHITE : BLACK, x, y);
+			pt.x=c;
+			pt.y=r;
+			pt = cartToIso(pt);
+
+			print_board_cell( ((r+c)%2) ? WHITE : BLACK, pt);
 
 			if (game->board[r][c].state == FILL) {
 				if (game->board[r][c].color == WHITE) {
-					print_pawn(WHITE, x, y);
+					print_pawn(WHITE, pt);
 				}
 			}
 		}
@@ -87,7 +88,7 @@ void displayBoard(Game * game){
 	printLog(FINISHED_TASK, "Ok");
 }
 
-void print_board_cell(int color, int x, int y){
+void print_board_cell(int color, Point pt){
 	SDL_Texture* pTexture;
 
 	if (color == WHITE) { // Préparation du sprite de la case
@@ -97,7 +98,7 @@ void print_board_cell(int color, int x, int y){
 	}
 
 	if ( pTexture ) {
-		SDL_Rect dest = { x, y, SPRITE_WIDTH, SPRITE_WIDTH};
+		SDL_Rect dest = { pt.x, pt.y, SPRITE_WIDTH, SPRITE_WIDTH};
 
 		SDL_RenderCopy(renderer, pTexture, NULL, &dest); // Copie du pawn_sprite grâce au SDL_Renderer
 
@@ -108,14 +109,14 @@ void print_board_cell(int color, int x, int y){
 	}
 }
 
-void print_pawn(int color, int x, int y){
+void print_pawn(int color, Point pt){
 		SDL_Texture* pTexture = 0;
 
 	 if (color == WHITE) pTexture = SDL_CreateTextureFromSurface(renderer, white_pawn_sprite); // Préparation du pawn_sprite
 	 else pTexture = SDL_CreateTextureFromSurface(renderer, black_pawn_sprite); // Préparation du pawn_sprite
 
 	if ( pTexture ) {
-		SDL_Rect dest = { x, y, SPRITE_WIDTH, SPRITE_WIDTH};
+		SDL_Rect dest = { pt.x+SPRITE_WIDTH/4, pt.y+SPRITE_WIDTH/10, SPRITE_WIDTH/2, SPRITE_WIDTH/2};
 
 		SDL_RenderCopy(renderer, pTexture, NULL, &dest); // Copie du pawn_sprite grâce au SDL_Renderer
 

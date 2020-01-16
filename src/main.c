@@ -3,32 +3,38 @@
 int main(void) {
 
 	Game game;
-	// int quit = 0, winner = 0;
+	int quit = 0;//, winner = 0;
 
 	initGame( &game );
 	initGraphics();
-
 
 	updateBoard(&game);
 
   render();
 
-  SDL_Delay(5000);
+  //SDL_Delay(5000);
 
 	/*---------------- GAME LOOP ----------------*/
 
+	do{
+		// updateBoard(&game);
+
+		quit = handleInputs(&game);
+
+		// render();
+
+	}while(!quit);
 	/*
 	do {
 
 		showTips();
 
-		quit = handleEvents();
 
 		updateBoard();
 
 			//check victory
-		winner = checkVictory(game);
-		if (winner) {
+			checkVictory(game);
+		if (game->black.victory || game->white.victory || game->victory) {
 			quit = 1;
 		}
 	} while( !quit );
