@@ -28,9 +28,9 @@ SDL_Surface* cell_sprite_red;
 SDL_Surface* white_pawn_sprite;
 SDL_Surface* black_pawn_sprite;
 SDL_Renderer* renderer; // Création d'un SDL_Renderer (pour l'accélération matérielle)
-TTF_Font *font = 0;
+TTF_Font *font;
 SDL_Surface* textSurface;
-SDL_Color textColor = {0, 0, 0, 0};
+SDL_Color textColor;
 
 /*---------------- UTILS ----------------*/
 void initGraphics();

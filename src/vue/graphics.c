@@ -83,6 +83,8 @@ void print (Point pt, char* string, int color) {
 			textColor.b = 0;
 			break;
 	}
+	textColor.a = 0;
+
 
 	int text_width, text_height;
 
