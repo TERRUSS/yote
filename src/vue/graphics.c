@@ -70,7 +70,7 @@ void render(){
 }
 
 
-void print (Point pt, char* text, int color) {
+void print (Point pt, char* string, int color) {
 	switch (color) {
 		case WHITE:
 			textColor.r = 255;
@@ -86,8 +86,8 @@ void print (Point pt, char* text, int color) {
 
 	int text_width, text_height;
 
-	textSurface = TTF_RenderText_Solid(font, text, textColor);
-	text = SDL_CreateTextureFromSurface(renderer, textSurface);
+	textSurface = TTF_RenderText_Solid(font, string, textColor);
+	SDL_Texture * text = (SDL_Texture*)SDL_CreateTextureFromSurface(renderer, textSurface);
 	text_width = textSurface->w;
 	text_height = textSurface->h;
 

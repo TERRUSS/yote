@@ -3,7 +3,6 @@
 int main(void) {
 
 	Game game;
-	int quit = 0;//, winner = 0;
 
 	initGame( &game );
 	initGraphics();

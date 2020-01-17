@@ -30,7 +30,6 @@ SDL_Surface* black_pawn_sprite;
 SDL_Renderer* renderer; // Création d'un SDL_Renderer (pour l'accélération matérielle)
 TTF_Font *font = 0;
 SDL_Surface* textSurface;
-SDL_Texture* text = 0;
 SDL_Color textColor = {0, 0, 0, 0};
 
 /*---------------- UTILS ----------------*/

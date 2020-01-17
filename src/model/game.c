@@ -109,10 +109,10 @@ void resetBoardAccessibility(Game * game){
 
   for (int r = 0; r < CELL_R; r++) {
 		for (int c = CELL_C-1; c >= 0; c--) {
-      if (game->Board[r][c].state == ACCESSIBLE)
-        game->Board[r][c].state = EMPTY;
-      else if (game->Board[r][c].state == SELECTED)
-        game->Board[r][c].state = FILL;
+      if (game->board[r][c].state == ACCESSIBLE)
+        game->board[r][c].state = EMPTY;
+      else if (game->board[r][c].state == SELECTED)
+        game->board[r][c].state = FILL;
     }
   }
 }
