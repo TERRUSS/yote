@@ -11,6 +11,13 @@ int handleInputs(Game * game){
 
 	SDL_WaitEvent(&event);
 
+	SDL_GetMouseState(&x, &y);
+	Point mouse_pos;
+	mouse_pos.x = x; mouse_pos.y = y;
+
+	if(1/*is_in_board(mouse_pos)*/){
+
+	}
 
 	switch (event.type) {
 		case SDL_WINDOWEVENT:
@@ -25,10 +32,8 @@ int handleInputs(Game * game){
 		break;
 		case SDL_MOUSEBUTTONDOWN:
 		if ( SDL_GetMouseState(&x, &y) && SDL_BUTTON(1) ) {
-			Point click;
-			click.x = x; click.y = y;
 
-			Point point = handleClick(click);
+			Point point = handleClick(mouse_pos);
 
 			game->board[point.x][point.y].state = FILL;
 			game->board[point.x][point.y].color = WHITE;
@@ -56,7 +61,7 @@ void mouvPawn(Game * game, Point position){
 	Point click;
 	Point point;
 	Point nextPoint;
-	int takePawn = 0;
+	int mouv,takePawn = 0;
 
 	//select the next mouv
 	do{
