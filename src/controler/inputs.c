@@ -96,16 +96,17 @@ void mouvPawn(Game * game, Point position){
 
 			game->white.score = game->white.score + 2;
 			game->black.stock = game->black.stock - 2;
-			game->white.previousMouv = mouv;
+			game->white.secondPosition.x = point.x;
+			game->white.secondPosition.y = point.y;
 		}else{
-
 			do {
 				nextPoint=handleClick(click);
 			} while((game->board[nextPoint.x][nextPoint.y].color==WHITE) && (nextPoint.x != point.x) && (nextPoint.y != point.y) && (game->board[nextPoint.x][nextPoint.y].state==FILL));
 
 			game->black.score = game->black.score + 2;
 			game->white.stock = game->white.stock - 2;
-			game->black.previousMouv = mouv;
+			game->black.secondPosition.x = point.x;
+			game->black.secondPosition.y = point.y;
 		}
 	}
 }

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "../vue/utils.h"
 
 #define CELL_R 6
 #define CELL_C 5
@@ -45,3 +46,4 @@ void initGame( Game * game);
 void game(Game * game);
 int checkVictory(Game * game);
 int pickPlayer ();
+void round (Game * game);

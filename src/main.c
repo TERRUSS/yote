@@ -2,29 +2,28 @@
 
 int main(void) {
 
-	// Point click;
-	// Point point;
 	Game game;
 	int quit = 0;//, winner = 0;
 
 	initGame( &game );
 	initGraphics();
 
-	updateBoard(&game);
 
-  	render();
+	// welcome menu - players setup
+	getPlayersInfos(game);
 
-  //SDL_Delay(5000);
 
 	game.white.playing = pickPlayer();
 	game.black.playing = !pickPlayer();
 
 	/*---------------- GAME LOOP ----------------*/
 
-	
+
 
 	do{
+
 		updateBoard(&game);
+		render();
 
 		quit = handleInputs(&game);
 
@@ -36,15 +35,7 @@ int main(void) {
 
 		showTips();
 
-		do {
-			point = handleClick(click);
-		} while(((game->board[point.x][point.y].color==WHITE)&&(game.white.playing == 1)) || ((game->board[point.x][point.y].color==BLACK)&&(game.black.playing == 1)));
-
-		if (game->board[point.x][point.y].state==STOCK) {
-			stockToBoard(game);
-		}else{
-			mouvPawn(game, point);
-		}
+		round(&game);
 
 		updateBoard();
 

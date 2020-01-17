@@ -54,3 +54,19 @@ int pickPlayer (){
     srand(time(NULL));
     return rand()%2;
 }
+
+void round (Game * game){
+
+    Point click;
+	Point point;
+
+    do {
+        point = handleClick(click);
+    } while(((game->board[point.x][point.y].color==WHITE)&&(game.white.playing == 1)) || ((game->board[point.x][point.y].color==BLACK)&&(game.black.playing == 1)));
+
+    if (game->board[point.x][point.y].state==STOCK) {
+        stockToBoard(&game);
+    }else{
+        mouvPawn(&game, point);
+    }
+}
