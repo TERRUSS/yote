@@ -41,6 +41,10 @@ void initGraphics(){
 		quitGraphics();
 	}
 
+	printLog(LOGGING_STEP, "Loading fonts");
+	TTF_Init();
+	font = TTF_OpenFont("/home/tmo/Code/yote/src/assets/fonts/font.ttf", 24);
+
 	printLog(FINISHED_TASK, "Initialisation Completed");
 }
 
@@ -54,12 +58,44 @@ void quitGraphics(){
 	SDL_FreeSurface(black_pawn_sprite);
 	SDL_DestroyRenderer(renderer);
 
+	TTF_Quit();
+	SDL_FreeSurface(textSurface);
+
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
 void render(){
 	SDL_RenderPresent(renderer); // Affichage
+}
+
+
+void print (Point pt, char* text, int color) {
+	switch (color) {
+		case WHITE:
+			textColor.r = 255;
+			textColor.g = 255;
+			textColor.b = 255;
+			break;
+		case BLACK:
+			textColor.r = 0;
+			textColor.g = 0;
+			textColor.b = 0;
+			break;
+	}
+
+	int text_width, text_height;
+
+	textSurface = TTF_RenderText_Solid(font, text, textColor);
+	text = SDL_CreateTextureFromSurface(renderer, textSurface);
+	text_width = textSurface->w;
+	text_height = textSurface->h;
+
+	SDL_FreeSurface(textSurface);
+	SDL_Rect renderQuad = { 20, 50, text_width, text_height };
+	SDL_RenderCopy(renderer, text, NULL, &renderQuad);
+
+	SDL_DestroyTexture(text);
 }
 
 /*--------- PRINTING FUNCTIONS ----------*/

@@ -1,7 +1,7 @@
 
 #include "menu.h"
 
-void getPlayersName(Game * game) {
+void getPlayersInfos(Game * game) {
 
 	SDL_StartTextInput();
 	recordText();
@@ -9,18 +9,30 @@ void getPlayersName(Game * game) {
 
 }
 
+
+
 void recordText() {
 	char rep[LEN_MAX + 1] = {0};
 	size_t len = 0;
 	SDL_Event event;
-	SDL_bool quit = SDL_FALSE;
 
-	while(!quit) {
+	Point position;
+
+	SDL_RenderClear(renderer);
+	backgroundColor(222, 49, 99);
+	render();
+
+	while(1) {
+
+		SDL_RenderClear(renderer);
+		backgroundColor(222, 49, 99);
+
 
 		SDL_bool has_type = SDL_FALSE;
 		SDL_WaitEvent(&event);
-		if(event.type == SDL_QUIT)
-			quit = SDL_TRUE;
+		if(event.type == SDL_QUIT){
+			quitGraphics();
+		}
 
 		else if( event.type == SDL_KEYDOWN) {
 
@@ -28,6 +40,11 @@ void recordText() {
 				rep[len - 1] = 0;
 				len--;
 				has_type = SDL_TRUE;
+			}
+
+			else if(event.key.keysym.sym == SDLK_RETURN) {
+				SDL_FreeSurface(textSurface);
+				break;
 			}
 
 			if(event.key.keysym.sym == SDLK_v && (SDL_GetModState() & KMOD_CTRL) && SDL_HasClipboardText()) {
@@ -50,20 +67,13 @@ void recordText() {
 			len += l_copy;
 			has_type = SDL_TRUE;
 		}
-		if(has_type)
-			puts(rep);
+		if(has_type) {
 
-			SDL_Color textColor = { 255, 255, 255, 0 };
-			TTF_Init();
-			TTF_Font *font = TTF_OpenFont(font_path, 24);
-			
-			SDL_Surface* textSurface = TTF_RenderText_Solid(font, rep, textColor);
-			SDL_Texture* text = SDL_CreateTextureFromSurface(renderer, textSurface);
-			int text_width = textSurface->w;
-			int text_height = textSurface->h;
-			SDL_FreeSurface(textSurface);
-			SDL_Rect renderQuad = { 20, win_height - 30, text_width, text_height };
-			SDL_RenderCopy(renderer, text, NULL, &renderQuad);
-			SDL_DestroyTexture(text);
+			position.x = 20;
+			position.y = 50;
+			print(position, rep, WHITE);
+
+			render();
+		}
 	}
 }

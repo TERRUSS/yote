@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+
 #include "../controler/point.h"
 #include "utils.h"
 #include "../utils/utils.h"
@@ -18,17 +20,24 @@
 #define HIT_BOX_WIDTH 51
 #define HIT_BOX_HEIGHT 53
 
+// enum {WHITE, BLACK}
+
 SDL_Window* window;
 SDL_Surface* cell_sprite_blue;
 SDL_Surface* cell_sprite_red;
 SDL_Surface* white_pawn_sprite;
 SDL_Surface* black_pawn_sprite;
 SDL_Renderer* renderer; // Création d'un SDL_Renderer (pour l'accélération matérielle)
+TTF_Font *font = 0;
+SDL_Surface* textSurface;
+SDL_Texture* text = 0;
+SDL_Color textColor = {0, 0, 0, 0};
 
 /*---------------- UTILS ----------------*/
 void initGraphics();
 void quitGraphics();
 void render();
+void print (Point pt, char* text, int color);
 
 /*--------- PRINTING FUNCTIONS ----------*/
 void print_board_cell(int color, Point pt);
