@@ -55,18 +55,43 @@ int pickPlayer (){
     return rand()%2;
 }
 
-void round (Game * game){
+void roundPlayer (Game * game){
 
     Point click;
 	Point point;
 
     do {
-        point = handleClick(click);
-    } while(((game->board[point.x][point.y].color==WHITE)&&(game.white.playing == 1)) || ((game->board[point.x][point.y].color==BLACK)&&(game.black.playing == 1)));
+        waitClick(&click);
+    } while(((game->board[point.x][point.y].color!=WHITE)&&(game->currentPlayer == 0)) || ((game->board[point.x][point.y].color!=BLACK)&&(game->currentPlayer == 0)));
 
     if (game->board[point.x][point.y].state==STOCK) {
-        stockToBoard(&game);
+        stockToBoard(game);
     }else{
-        mouvPawn(&game, point);
+
+
+        if ((point.x!=game->white.secondPosition.x)&&(point.y!=game->white.secondPosition.y)&&(game->currentPlayer == 0)) {
+            game->white.firstPosition.x = point.x;
+			game->white.firstPosition.y = point.y;
+    }else if ((point.x!=game->black.secondPosition.x)&&(point.y!=game->black.secondPosition.y)&&(game->currentPlayer == 1)) {
+            game->black.firstPosition.x = point.x;
+			game->black.firstPosition.y = point.y;
+    }else{
+            game->black.firstPosition.x = point.x;
+            game->black.firstPosition.y = point.y;
+            game->black.secondPosition.x = -1;
+            game->black.secondPosition.y = -1;
+            game->black.thirdPosition.x = -1;
+            game->black.thirdPosition.y = -1;
+        }
+        mouvPawn(game, point);
     }
+}
+
+
+
+int isMovablePawn(Game * game, Point point) {
+  if (game->board[point.x][point.y].state == FILL && game->board[point.x][point.y].color == game->currentPlayer)
+    return 1;
+  else
+    return 0;
 }

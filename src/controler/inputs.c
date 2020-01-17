@@ -2,9 +2,8 @@
 #include <stdio.h>
 
 
-int handleInputs(Game * game){
+void waitClick(Point * point){
 
-	int quit = 0;
 	int x, y;
 
 	SDL_Event event;
@@ -15,58 +14,46 @@ int handleInputs(Game * game){
 	Point mouse_pos;
 	mouse_pos.x = x; mouse_pos.y = y;
 
-	if(is_in_board(mouse_pos)){
+	if(isInBoard(mouse_pos)){
 		printf("ok");
 	}
 
 	switch (event.type) {
 		case SDL_WINDOWEVENT:
 		if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
-			quit = 1;
+			quitGraphics();
 		}
 		break;
 		case SDL_KEYUP:
 		if ( event.key.keysym.sym == SDLK_ESCAPE ) {
-			quit = 1;
+			quitGraphics();
 		}
 		break;
 		case SDL_MOUSEBUTTONDOWN:
-		if ( SDL_GetMouseState(&x, &y) && SDL_BUTTON(1) ) {
-
-			Point point = handleClick(mouse_pos);
-
-			game->board[point.x][point.y].state = FILL;
-			game->board[point.x][point.y].color = WHITE;
+		if ( SDL_BUTTON(1) ) {
+			point->x = mouse_pos.x;
+			point->y = mouse_pos.y;
 		}
 	}
-
-	return quit;
-}
-
-
-Point handleClick(Point click){
-
-	Point coords = isoToCart(click);
-
-	printf("case @[%d, %d]  ", coords.x, coords.y);
-	printf("click @[%d, %d]\n", click.x, click.y);
-
-
-	return coords;
 }
 
 
 void mouvPawn(Game * game, Point position){
 
-	Point click;
 	Point point;
 	Point nextPoint;
-	int mouv,takePawn = 0;
+	int takePawn = 0;
+	int check = 0;
 
 	//select the next mouv
 	do{
-		point=handleClick(click);
-	}while((point.x==position.x+1)||(point.x==position.x-1)||(point.y==position.y+1)||(point.y==position.y-1));
+		waitClick(&point);
+		if ((game->currentPlayer == 0)&&(point.x==game->white.thirdPosition.x)&&(point.y==game->white.thirdPosition.y)) {
+			check = 1;
+		}else if ((game->currentPlayer == 1)&&(point.x==game->black.thirdPosition.x)&&(point.y==game->black.thirdPosition.y)) {
+			check = 1;
+		}
+	}while(((point.x!=position.x+1)||(point.x!=position.x-1)||(point.y!=position.y+1)||(point.y!=position.y-1))&&(check!=0));
 
 	if(game->board[point.x][point.y].state==EMPTY){
 		position.x=point.x;
@@ -96,44 +83,48 @@ void mouvPawn(Game * game, Point position){
 		if (game->board[position.x][position.y].color==WHITE) {
 
 			do {
-				nextPoint=handleClick(click);
-			} while((game->board[nextPoint.x][nextPoint.y].color==BLACK) && (nextPoint.x != point.x) && (nextPoint.y != point.y) && (game->board[nextPoint.x][nextPoint.y].state==FILL));
+				waitClick(&nextPoint);
+			} while((game->board[nextPoint.x][nextPoint.y].color!=BLACK) && (nextPoint.x == point.x) && (nextPoint.y == point.y) && (game->board[nextPoint.x][nextPoint.y].state!=FILL));
 
 			game->white.score = game->white.score + 2;
 			game->black.stock = game->black.stock - 2;
 			game->white.secondPosition.x = point.x;
 			game->white.secondPosition.y = point.y;
+			game->white.thirdPosition.x = position.x;
+			game->white.thirdPosition.y = position.y;
 		}else{
 			do {
-				nextPoint=handleClick(click);
-			} while((game->board[nextPoint.x][nextPoint.y].color==WHITE) && (nextPoint.x != point.x) && (nextPoint.y != point.y) && (game->board[nextPoint.x][nextPoint.y].state==FILL));
+				waitClick(&nextPoint);
+			} while((game->board[nextPoint.x][nextPoint.y].color!=WHITE) && (nextPoint.x == point.x) && (nextPoint.y == point.y) && (game->board[nextPoint.x][nextPoint.y].state!=FILL));
 
 			game->black.score = game->black.score + 2;
 			game->white.stock = game->white.stock - 2;
 			game->black.secondPosition.x = point.x;
 			game->black.secondPosition.y = point.y;
+			game->black.thirdPosition.x = position.x;
+			game->black.thirdPosition.y = position.y;
 		}
 	}
 }
 
 void stockToBoard(Game * game){
 
-	Point click;
 	Point point;
 
 	//select the position of the new pawn
 	do {
-		point = handleClick(click);
-	} while(game->board[point.x][point.y].state==EMPTY);
+		waitClick(&point);
 
-	if (game->white.playing==1) {
+	} while(game->board[point.x][point.y].state!=EMPTY);
+
+	if (game->currentPlayer==0) {
 		game->white.stock --;
 	}else{
 		game->black.stock --;
 	}
 }
 
-int is_in_board(Point mouse_pos){
+int isInBoard(Point mouse_pos){
 	Point point = isoToCart(mouse_pos);
 	if (point.x >=0 && point.x < CELL_R && point.y >=0 && point.y < CELL_C){
 		return 1;

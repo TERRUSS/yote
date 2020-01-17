@@ -10,11 +10,10 @@ int main(void) {
 
 
 	// welcome menu - players setup
-	getPlayersInfos(game);
+	// getPlayersInfos(game);
 
 
-	game.white.playing = pickPlayer();
-	game.black.playing = !pickPlayer();
+	game.currentPlayer = pickPlayer();
 
 	/*---------------- GAME LOOP ----------------*/
 
@@ -25,7 +24,7 @@ int main(void) {
 		updateBoard(&game);
 		render();
 
-		quit = handleInputs(&game);
+		gameLoop(&game);
 
 		render();
 

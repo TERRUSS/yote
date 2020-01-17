@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-Wall
 LIBS=-lSDL2 -lSDL2_image -lm
-FILES=src/main.c src/vue/graphics.c src/vue/utils.c src/utils/utils.c src/model/game.c src/controler/inputs.c
-HEADERS=src/main.h src/vue/graphics.h src/vue/utils.h src/utils/utils.h src/model/game.h src/controler/inputs.h
+FILES=src/main.c src/vue/graphics.c src/vue/utils.c src/utils/utils.c src/model/game.c src/controler/inputs.c src/controler/game.c
+HEADERS=src/main.h src/vue/graphics.h src/vue/utils.h src/utils/utils.h src/model/game.h src/controler/inputs.h src/controler/game.h
 DIR=build
 
 
