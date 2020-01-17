@@ -6,7 +6,7 @@
 
 
 void waitClick(Point * point);
-void mouvPawn(Game * game, Point position);
+void mouvPawn_hugo(Game * game, Point position);
 
 int isInBoard(Point mouse_pos);
 int isInBoard_coord(Point mouse_pos);

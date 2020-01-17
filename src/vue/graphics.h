@@ -45,3 +45,4 @@ void print_stock(int color, int number);
 void displayBoard(Game * game);
 void backgroundColor(int r, int g, int b);
 void updateBoard(Game * game);
+void displayPlayerName(Game * game);

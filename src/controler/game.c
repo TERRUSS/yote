@@ -6,6 +6,7 @@ void gameLoop (Game * game) {
 	Point click;
 	int winner = 0;
 
+	displayPlayerName(game);
 	updateBoard(game);
 	render();
 
@@ -13,28 +14,25 @@ void gameLoop (Game * game) {
 
 		click.x = -1; click.y = -1;
 		waitClick(&click);
-		Point point = isoToCart(click);
 
-		printf("joueur courant %d, Point [%d,%d]\n",game->currentPlayer,point.x,point.y);
+		if (click.x != -1 && click.y != -1){
+			Point point = isoToCart(click);
 
-		//dans le plateau
-		if ( isInBoard(point) ) {
+			//dans le plateau
+			if ( isInBoard(point) ) {
 
-			if ( isMovablePawn(game, point) ){
-				movePawn2(game, point);
-				//winner = 1;
+				if ( isMovablePawn(game, point) ){
+					moveLoop(game, point);
+				}
+
+				updateBoard(game);
+				render();
+
+			}else if(isInStock(game,click)){
+				placePawnFromStock(game);
+				updateBoard(game);
+				render();
 			}
-
-			updateBoard(game);
-			render();
-
-		}else if(isInStock(game,click)){
-			placePawnFromStock(game);
-			updateBoard(game);
-			render();
-
-		}else{
-			//printf("Click pas dans le plateau !\n");
 		}
 
 
@@ -51,6 +49,8 @@ void placePawnFromStock(Game * game){
 	//si la réserve est vide ne rentre pas dans la boucle
 	if ((game->currentPlayer == BLACK && game->black.stock <=0) || (game->currentPlayer == WHITE && game->white.stock<=0))
 		place = 1;
+	else
+		printf("Cliquer sur une case vide pour placer un pion - pour annuler cliquer de nouveau sur la reserve\n");
 
 	//attend que le joueur place un pion
 	while(!place){
@@ -68,7 +68,8 @@ void placePawnFromStock(Game * game){
 			place = 1;
 
 			//change de joueur;
-			game->currentPlayer = (game->currentPlayer+1)%2;
+			nextPlayer(game);
+			displayPlayerName(game);
 		}
 		//si on reclick dans le stock quitte le placement
 		else if(isInStock(game,click)){
@@ -78,31 +79,11 @@ void placePawnFromStock(Game * game){
 	}
 }
 
-void movePawn2(Game * game,Point point){
+void moveLoop(Game * game,Point src){
 	Point click;
 	int played = 0;
-	int tuple[4][2] = {{0,1},{1,0},{-1,0},{0,-1}};
-	int state,color;
 
-	//Définie les cases accessible et selectionné
-	game->board[point.x][point.y].state = SELECTED;
-	for (int i=0;i<4;i++){
-
-		state = game->board[point.x+tuple[i][0]][point.y+tuple[i][1]].state;
-		color = game->board[point.x+tuple[i][0]][point.y+tuple[i][1]].color;
-
-		//Si la case autour est vide elle est accessible
-		if (state == EMPTY){
-			game->board[point.x+tuple[i][0]][point.y+tuple[i][1]].state = ACCESSIBLE;
-		}else if(state == FILL && color != game->currentPlayer){
-			//Si la case est rempli par un pion d'un autre joueur
-			//il peut la manger si la case derrière est VIDE
-			if(game->board[point.x+tuple[i][0]*2][point.y+tuple[i][1]*2].state == EMPTY){
-				game->board[point.x+tuple[i][0]*2][point.y+tuple[i][1]*2].state = ACCESSIBLE;
-			}
-		}
-	}
-
+	setBoardAccessibility(game,src);
 
 	//attend que le joueur deplace sont pion
 	while(!played){
@@ -111,21 +92,29 @@ void movePawn2(Game * game,Point point){
 		Point p = isoToCart(click);
 
 		if ( isInBoard(p) ) {
-			printf("J'attend que tu jou pd\n");
-			//played = 1;
+			//si on fais un bon deplacement
 			if (game->board[p.x][p.y].state == ACCESSIBLE){
-				printf("bien jouer\n");
-				//played = 1;
+				resetBoardAccessibility(game);
+				movePawn(game,src,p);
+				nextPlayer(game);
+				displayPlayerName(game);
+				played = 1;
 			}
 			//Si on click sur un autre de nos pions
-			if ( isMovablePawn(game, p) ){
+			else if ( isMovablePawn(game, p) ){
 				resetBoardAccessibility(game);
-				game->board[p.x][p.y].state = SELECTED;
+				src.x = p.x;src.y = p.y;
+				setBoardAccessibility(game,p);
+			}
+			else{
+				printf("Deplacement impossible\n");
 			}
 		}
-
-
-
-
+		//si on click sur le stock on lance la fonction stock et on quite le move loop
+		else if(isInStock(game,click)){
+			resetBoardAccessibility(game);
+			played=1;
+			placePawnFromStock(game);
+		}
 	}
 }

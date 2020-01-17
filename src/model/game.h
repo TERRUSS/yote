@@ -17,10 +17,6 @@ typedef struct {
 	int score;
 	char name[MAX_NAME_LENGTH];
 	int color;
-	int victory;
-	Point firstPosition;
-	Point secondPosition;
-	Point thirdPosition;
 } Player;
 
 typedef struct {
@@ -33,8 +29,6 @@ typedef struct {
 	Player white;
 	int round;
 	Cell board[CELL_R][CELL_C];
-	int draw;
-	int victory;
 	int currentPlayer;
 } Game;
 
@@ -57,3 +51,7 @@ void roundPlayer (Game * game);
 int isMovablePawn(Game * game, Point point);
 int isInStock(Game * game,Point click);
 void resetBoardAccessibility(Game * game);
+void setBoardAccessibility(Game * game,Point point);
+void movePawn(Game * game, Point src ,Point dst);
+
+void nextPlayer(Game * game);

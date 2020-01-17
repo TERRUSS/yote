@@ -204,3 +204,13 @@ void backgroundColor(int r, int g, int b){
 	rectangle.h = WINDOW_HEIGHT;
 	SDL_RenderFillRect(renderer, &rectangle);
 }
+
+void displayPlayerName(Game * game){
+
+	if (game->currentPlayer == BLACK){
+		printf("Joueur : %s\n",game->black.name);
+	}else{
+		printf("Joueur : %s\n",game->white.name);
+	}
+
+}

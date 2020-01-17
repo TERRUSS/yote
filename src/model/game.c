@@ -19,18 +19,19 @@ void initGame(Game * game){
     Player newplayer;
     newplayer.stock = 12;
     newplayer.score = 0;
-    // newplayer.name = "";
+    strcpy(newplayer.name,"Noir");
     newplayer.color = BLACK;
 
     game->black = newplayer;
 
     newplayer.color = WHITE;
+    strcpy(newplayer.name,"Blanc");
     game->white = newplayer;
 
     game->round = 0;
 
 }
-
+/*
 int checkVictory(Game * game){
 
     if((12 - game->black.stock == 10 )&&(12 - game->white.stock == 10)){
@@ -47,12 +48,12 @@ int checkVictory(Game * game){
 
     return 0;
 }
-
+*/
 int pickPlayer (){
     srand(time(NULL));
     return rand()%2;
 }
-
+/*
 void roundPlayer (Game * game){
 
     Point click;
@@ -77,9 +78,10 @@ void roundPlayer (Game * game){
         game->black.thirdPosition.x = -1;
         game->black.thirdPosition.y = -1;
     }
-    mouvPawn(game, point);
+    mouvPawn_hugo(game, point);
 
 }
+*/
 
 
 
@@ -117,7 +119,65 @@ void resetBoardAccessibility(Game * game){
   }
 }
 
-/*
-void setBoardAccessibility(){
 
-}*/
+void setBoardAccessibility(Game * game,Point point){
+  int tuple[4][2] = {{0,1},{1,0},{-1,0},{0,-1}};
+	int state,color;
+  Point p;
+
+  //Définie les cases accessible et selectionné
+	game->board[point.x][point.y].state = SELECTED;
+	for (int i=0;i<4;i++){
+    p.x = point.x+tuple[i][0];
+    p.y = point.y+tuple[i][1];
+
+    if(isInBoard(p)){
+  		state = game->board[p.x][p.y].state;
+  		color = game->board[p.x][p.y].color;
+
+  		//Si la case autour est vide elle est accessible
+  		if (state == EMPTY){
+  			game->board[p.x][p.y].state = ACCESSIBLE;
+  		}else if(state == FILL && color != game->currentPlayer){
+  			//Si la case est rempli par un pion d'un autre joueur
+  			//il peut la manger si la case derrière est VIDE
+  			if(game->board[p.x+tuple[i][0]][p.y+tuple[i][1]].state == EMPTY){
+  				game->board[p.x+tuple[i][0]][p.y+tuple[i][1]].state = ACCESSIBLE;
+  			}
+  		}
+    }
+	}
+}
+
+void movePawn(Game * game, Point src ,Point dst){
+  game->board[src.x][src.y].state = EMPTY;
+  game->board[dst.x][dst.y].state = FILL;
+  game->board[dst.x][dst.y].color = game->currentPlayer;
+
+  int diff_x = src.x-dst.x;
+  int diff_y = src.y-dst.y;
+  Point eat;
+  if (diff_x == -2 || diff_x == 2){
+    if (diff_x == 2)
+      eat.x = dst.x+1;
+    else
+      eat.x= dst.x-1;
+    eat.y = dst.y;
+    game->board[eat.x][eat.y].state = EMPTY;
+    printf("pion manger sur l'axe x src:%d;%d,dst:%d;%d,milieu:%d;%d\n",src.x,src.y,dst.x,dst.y,eat.x,eat.y);
+  }
+  else if(diff_y == -2 || diff_y == 2){
+    if (diff_y == 2)
+      eat.y= dst.y+1;
+    else
+      eat.y= dst.y-1;
+    eat.x = dst.x;
+    game->board[eat.x][eat.y].state = EMPTY;
+    printf("pion manger sur l'axe y src:%d;%d,dst:%d;%d,milieu:%d;%d\n",src.x,src.y,dst.x,dst.y,eat.x,eat.y);
+
+  }
+}
+
+void nextPlayer(Game * game){
+  game->currentPlayer = (game->currentPlayer+1)%2;
+}

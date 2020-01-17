@@ -28,8 +28,8 @@ void waitClick(Point * point){
 	}
 }
 
-
-void mouvPawn(Game * game, Point position){
+/*
+void mouvPawn_hugo(Game * game, Point position){
 
 	Point point;
 	Point nextPoint;
@@ -97,7 +97,7 @@ void mouvPawn(Game * game, Point position){
 		}
 	}
 }
-
+*/
 
 int isInBoard_coord(Point mouse_pos){
 	Point point = isoToCart(mouse_pos);
