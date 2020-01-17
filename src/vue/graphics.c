@@ -117,6 +117,9 @@ void displayBoard(Game * game){
 				if (game->board[r][c].color == WHITE) {
 					print_pawn(WHITE, pt);
 				}
+				else if (game->board[r][c].color == BLACK) {
+					print_pawn(BLACK, pt);
+				}
 			}
 		}
 	}
@@ -163,10 +166,30 @@ void print_pawn(int color, Point pt){
 	}
 }
 
+void print_stock(int color, int number){
+	Point pt;
+	if (color == BLACK){
+		pt.x = 0;
+	}else{
+		pt.x = WINDOW_WIDTH-SPRITE_WIDTH;;
+	}
+
+	pt.y=WINDOW_HEIGHT-SPRITE_WIDTH;
+
+	for(int i = 0;i<number;i++){
+		print_pawn(color,pt);
+		pt.y-=10;
+	}
+
+}
+
 void updateBoard(Game * game) {
 	// SDL_RenderClear(renderer);
 	backgroundColor(222, 49, 99);
 	displayBoard(game);
+
+	print_stock(BLACK, game->black.stock);
+	print_stock(WHITE, game->white.stock);
 }
 
 void backgroundColor(int r, int g, int b){

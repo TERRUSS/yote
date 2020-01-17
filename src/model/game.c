@@ -14,12 +14,10 @@ void initGame(Game * game){
             game->board[r][c] = newcell;
         }
     }
-    game->board[1][0].state = FILL;
-    game->board[1][0].color = WHITE;
 
     // init player
     Player newplayer;
-    newplayer.stock = 20;
+    newplayer.stock = 12;
     newplayer.score = 0;
     // newplayer.name = "";
     newplayer.color = BLACK;
@@ -64,27 +62,23 @@ void roundPlayer (Game * game){
         waitClick(&click);
     } while(((game->board[point.x][point.y].color!=WHITE)&&(game->currentPlayer == 0)) || ((game->board[point.x][point.y].color!=BLACK)&&(game->currentPlayer == 0)));
 
-    if (game->board[point.x][point.y].state==STOCK) {
-        stockToBoard(game);
-    }else{
 
-
-        if ((point.x!=game->white.secondPosition.x)&&(point.y!=game->white.secondPosition.y)&&(game->currentPlayer == 0)) {
+    if ((point.x!=game->white.secondPosition.x)&&(point.y!=game->white.secondPosition.y)&&(game->currentPlayer == 0)) {
             game->white.firstPosition.x = point.x;
 			game->white.firstPosition.y = point.y;
     }else if ((point.x!=game->black.secondPosition.x)&&(point.y!=game->black.secondPosition.y)&&(game->currentPlayer == 1)) {
             game->black.firstPosition.x = point.x;
 			game->black.firstPosition.y = point.y;
     }else{
-            game->black.firstPosition.x = point.x;
-            game->black.firstPosition.y = point.y;
-            game->black.secondPosition.x = -1;
-            game->black.secondPosition.y = -1;
-            game->black.thirdPosition.x = -1;
-            game->black.thirdPosition.y = -1;
-        }
-        mouvPawn(game, point);
+        game->black.firstPosition.x = point.x;
+        game->black.firstPosition.y = point.y;
+        game->black.secondPosition.x = -1;
+        game->black.secondPosition.y = -1;
+        game->black.thirdPosition.x = -1;
+        game->black.thirdPosition.y = -1;
     }
+    mouvPawn(game, point);
+
 }
 
 
@@ -95,3 +89,35 @@ int isMovablePawn(Game * game, Point point) {
   else
     return 0;
 }
+
+int isInStock(Game * game,Point click){
+  if (game->currentPlayer == BLACK){
+    if (click.x >=0 && click.x < SPRITE_WIDTH){
+      return 1;
+    }
+    return 0;
+  }else{
+    if (click.x >=WINDOW_WIDTH-SPRITE_WIDTH && click.x < WINDOW_WIDTH){
+      return 1;
+    }
+    return 0;
+  }
+}
+
+
+void resetBoardAccessibility(Game * game){
+
+  for (int r = 0; r < CELL_R; r++) {
+		for (int c = CELL_C-1; c >= 0; c--) {
+      if (game->Board[r][c].state == ACCESSIBLE)
+        game->Board[r][c].state = EMPTY;
+      else if (game->Board[r][c].state == SELECTED)
+        game->Board[r][c].state = FILL;
+    }
+  }
+}
+
+/*
+void setBoardAccessibility(){
+
+}*/

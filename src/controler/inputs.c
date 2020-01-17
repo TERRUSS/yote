@@ -5,35 +5,26 @@
 void waitClick(Point * point){
 
 	int x, y;
-
 	SDL_Event event;
 
 	SDL_WaitEvent(&event);
 
-	SDL_GetMouseState(&x, &y);
-	Point mouse_pos;
-	mouse_pos.x = x; mouse_pos.y = y;
-
-	if(isInBoard(mouse_pos)){
-		printf("ok");
-	}
-
 	switch (event.type) {
 		case SDL_WINDOWEVENT:
-		if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
-			quitGraphics();
-		}
-		break;
+			if ( event.window.event == SDL_WINDOWEVENT_CLOSE ) {
+				quitGraphics();
+			}
+			break;
 		case SDL_KEYUP:
-		if ( event.key.keysym.sym == SDLK_ESCAPE ) {
-			quitGraphics();
-		}
-		break;
+			if ( event.key.keysym.sym == SDLK_ESCAPE ) {
+				quitGraphics();
+			}
+			break;
 		case SDL_MOUSEBUTTONDOWN:
-		if ( SDL_BUTTON(1) ) {
-			point->x = mouse_pos.x;
-			point->y = mouse_pos.y;
-		}
+			if ( SDL_GetMouseState(&x, &y) && SDL_BUTTON(1) ) {
+				point->x = x;
+				point->y = y;
+			}
 	}
 }
 
@@ -107,26 +98,17 @@ void mouvPawn(Game * game, Point position){
 	}
 }
 
-void stockToBoard(Game * game){
 
-	Point point;
-
-	//select the position of the new pawn
-	do {
-		waitClick(&point);
-
-	} while(game->board[point.x][point.y].state!=EMPTY);
-
-	if (game->currentPlayer==0) {
-		game->white.stock --;
-	}else{
-		game->black.stock --;
+int isInBoard_coord(Point mouse_pos){
+	Point point = isoToCart(mouse_pos);
+	if (point.x >=0 && point.x < CELL_R && point.y >=0 && point.y < CELL_C){
+		return 1;
 	}
+	return 0;
 }
 
 int isInBoard(Point mouse_pos){
-	Point point = isoToCart(mouse_pos);
-	if (point.x >=0 && point.x < CELL_R && point.y >=0 && point.y < CELL_C){
+	if (mouse_pos.x >=0 && mouse_pos.x < CELL_R && mouse_pos.y >=0 && mouse_pos.y < CELL_C){
 		return 1;
 	}
 	return 0;
