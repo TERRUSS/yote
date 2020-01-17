@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "../controler/point.h"
 #include "utils.h"
 #include "../utils/utils.h"
 #include "../model/game.h"

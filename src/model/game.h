@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "../controler/point.h"
+
 
 #define CELL_R 6
 #define CELL_C 5

@@ -1,12 +1,7 @@
 #pragma once
 
-typedef struct {
-	int x;
-	int y;
-} Point;
-
-
 #include <math.h>
+#include "../controler/point.h"
 #include "graphics.h"
 
 
