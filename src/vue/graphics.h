@@ -33,6 +33,7 @@ void render();
 /*--------- PRINTING FUNCTIONS ----------*/
 void print_board_cell(int color, Point pt);
 void print_pawn(int color, Point pt);
+void print_stock(int color, int number);
 void displayBoard(Game * game);
 void backgroundColor(int r, int g, int b);
 void updateBoard(Game * game);

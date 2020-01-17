@@ -95,3 +95,17 @@ int isMovablePawn(Game * game, Point point) {
   else
     return 0;
 }
+
+int isInStock(Game * game,Point click){
+  if (game->currentPlayer == BLACK){
+    if (click.x >=0 && click.x < SPRITE_WIDTH){
+      return 1;
+    }
+    return 0;
+  }else{
+    if (click.x >=WINDOW_WIDTH-SPRITE_WIDTH && click.x < WINDOW_WIDTH){
+      return 1;
+    }
+    return 0;
+  }
+}

@@ -12,23 +12,12 @@ int main(void) {
 	// welcome menu - players setup
 	// getPlayersInfos(game);
 
-
 	game.currentPlayer = pickPlayer();
 
 	/*---------------- GAME LOOP ----------------*/
 
-
-
-	do{
-
-		updateBoard(&game);
-		render();
-
 		gameLoop(&game);
 
-		render();
-
-	}while(!quit);
 	/*
 	do {
 

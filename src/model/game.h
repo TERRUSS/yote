@@ -54,3 +54,4 @@ int checkVictory(Game * game);
 int pickPlayer ();
 void roundPlayer (Game * game);
 int isMovablePawn(Game * game, Point point);
+int isInStock(Game * game,Point click);
