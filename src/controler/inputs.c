@@ -15,8 +15,8 @@ int handleInputs(Game * game){
 	Point mouse_pos;
 	mouse_pos.x = x; mouse_pos.y = y;
 
-	if(1/*is_in_board(mouse_pos)*/){
-
+	if(is_in_board(mouse_pos)){
+		printf("ok");
 	}
 
 	switch (event.type) {
@@ -113,8 +113,6 @@ void mouvPawn(Game * game, Point position){
 	}
 }
 
-
-
 void stockToBoard(Game * game){
 
 	Point click;
@@ -130,4 +128,12 @@ void stockToBoard(Game * game){
 	}else{
 		game->black.stock --;
 	}
+}
+
+int is_in_board(Point mouse_pos){
+	Point point = isoToCart(mouse_pos);
+	if (point.x >=0 && point.x < CELL_R && point.y >=0 && point.y < CELL_C){
+		return 1;
+	}
+	return 0;
 }

@@ -9,3 +9,4 @@ int handleInputs(Game * game);
 Point handleClick(Point click);
 void mouvPawn(Game * game, Point position);
 void stockToBoard(Game * game);
+int is_in_board(Point mouse_pos);
