@@ -21,7 +21,8 @@ typedef struct {
 	int color;
 	int victory;
 	int playing;
-	int previousMouv;
+	Point firstPosition;
+	Point secondPosition;
 } Player;
 
 typedef struct {

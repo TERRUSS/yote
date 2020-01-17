@@ -21,6 +21,8 @@ int main(void) {
 
 	/*---------------- GAME LOOP ----------------*/
 
+	
+
 	do{
 		updateBoard(&game);
 
