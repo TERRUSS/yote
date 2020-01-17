@@ -9,13 +9,13 @@
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
-#define MARGE_TOP 50
-#define MARGE_LEFT WINDOW_HEIGHT/1.5
+#define MARGE_TOP 0
+#define MARGE_LEFT 300
 #define SPRITE_WIDTH 70
 #define SPRITE_HEIGHT 70
 
-#define HIT_BOX_WIDTH 30.84
-#define HIT_BOX_HEIGHT 30.84
+#define HIT_BOX_WIDTH 51
+#define HIT_BOX_HEIGHT 53
 
 SDL_Window* window;
 SDL_Surface* cell_sprite_blue;

@@ -66,11 +66,11 @@ void render(){
 
 void displayBoard(Game * game){
 
-	printLog(LOGGING_TASK, "Displaying Board");
+	// printLog(LOGGING_TASK, "Displaying Board");
 
 	Point pt;
 	for (int r = 0; r < CELL_R; r++) {
-		for (int c = 0; c < CELL_C; c++) {
+		for (int c = CELL_C-1; c >= 0; c--) {
 			pt.x=c;
 			pt.y=r;
 			pt = cartToIso(pt);
@@ -85,7 +85,7 @@ void displayBoard(Game * game){
 		}
 	}
 
-	printLog(FINISHED_TASK, "Ok");
+	// printLog(FINISHED_TASK, "Ok");
 }
 
 void print_board_cell(int color, Point pt){

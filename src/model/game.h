@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #define CELL_R 6
 #define CELL_C 5
 
@@ -7,17 +11,17 @@
 
 #define VIDE 0
 #define MAX_NAME_LENGTH 50
-enum {EMPTY, FILL};
+enum {EMPTY, FILL, STOCK};
 enum {WHITE, BLACK};
 
 typedef struct {
 	int stock;	// pawns
-	int deadPauns;
 	int score;
 	char name[MAX_NAME_LENGTH];
 	int color;
 	int victory;
 	int playing;
+	int previousMouv;
 } Player;
 
 typedef struct {
@@ -39,5 +43,4 @@ typedef struct {
 void initGame( Game * game);
 void game(Game * game);
 int checkVictory(Game * game);
-void mouvPawn(Game * game);
-void stockToBoard(Game * game);
+int pickPlayer ();

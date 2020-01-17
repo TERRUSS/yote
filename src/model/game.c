@@ -1,6 +1,5 @@
 
 #include "game.h"
-#include <stdio.h>
 
 void initGame(Game * game){
 
@@ -21,7 +20,6 @@ void initGame(Game * game){
     // init player
     Player newplayer;
     newplayer.stock = 20;
-    newplayer.deadPauns = 0;
     newplayer.score = 0;
     // newplayer.name = "";
     newplayer.color = BLACK;
@@ -48,4 +46,11 @@ int checkVictory(Game * game){
     }else if((12 - game->black.stock == 10 )&&(12 - game->white.stock == 10)&&(game->draw==10)){
         game->victory=1;
     }
+
+    return 0;
+}
+
+int pickPlayer (){
+    srand(time(NULL));
+    return rand()%2;
 }
