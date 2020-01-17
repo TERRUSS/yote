@@ -7,7 +7,7 @@
 
 #define VIDE 0
 #define MAX_NAME_LENGTH 50
-enum {EMPTY, FILL, STOCK};
+enum {EMPTY, FILL, SELECTED, ACCESSIBLE};
 enum {WHITE, BLACK};
 
 #include "../controler/point.h"
@@ -53,5 +53,7 @@ void game(Game * game);
 int checkVictory(Game * game);
 int pickPlayer ();
 void roundPlayer (Game * game);
+
 int isMovablePawn(Game * game, Point point);
 int isInStock(Game * game,Point click);
+void resetBoardAccessibility(Game * game);

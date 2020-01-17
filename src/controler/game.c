@@ -21,9 +21,8 @@ void gameLoop (Game * game) {
 		if ( isInBoard(point) ) {
 
 			if ( isMovablePawn(game, point) ){
-				printf("Click sur le pion du joueur !\n");
-				winner = 1;
-				// movePawn(game, point);
+				movePawn2(game, point);
+				//winner = 1;
 			}
 
 			updateBoard(game);
@@ -35,7 +34,7 @@ void gameLoop (Game * game) {
 			render();
 
 		}else{
-			printf("Click pas dans le plateau !\n");
+			//printf("Click pas dans le plateau !\n");
 		}
 
 
@@ -67,11 +66,66 @@ void placePawnFromStock(Game * game){
 			else
 				game->white.stock--;
 			place = 1;
+
+			//change de joueur;
+			game->currentPlayer = (game->currentPlayer+1)%2;
 		}
 		//si on reclick dans le stock quitte le placement
 		else if(isInStock(game,click)){
 			place = 1;
 		}
+
+	}
+}
+
+void movePawn2(Game * game,Point point){
+	Point click;
+	int played = 0;
+	int tuple[4][2] = {{0,1},{1,0},{-1,0},{0,-1}};
+	int state,color;
+
+	//Définie les cases accessible et selectionné
+	game->board[point.x][point.y].state = SELECTED;
+	for (int i=0;i<4;i++){
+
+		state = game->board[point.x+tuple[i][0]][point.y+tuple[i][1]].state;
+		color = game->board[point.x+tuple[i][0]][point.y+tuple[i][1]].color;
+
+		//Si la case autour est vide elle est accessible
+		if (state == EMPTY){
+			game->board[point.x+tuple[i][0]][point.y+tuple[i][1]].state = ACCESSIBLE;
+		}else if(state == FILL && color != game->currentPlayer){
+			//Si la case est rempli par un pion d'un autre joueur
+			//il peut la manger si la case derrière est VIDE
+			if(game->board[point.x+tuple[i][0]*2][point.y+tuple[i][1]*2].state == EMPTY){
+				game->board[point.x+tuple[i][0]*2][point.y+tuple[i][1]*2].state = ACCESSIBLE;
+			}
+		}
+	}
+
+
+	//attend que le joueur deplace sont pion
+	while(!played){
+		click.x = -1; click.y = -1;
+		waitClick(&click);
+		Point p = isoToCart(click);
+
+		if ( isInBoard(p) ) {
+			printf("J'attend que tu jou pd\n");
+			//played = 1;
+			if (game->board[p.x][p.y].state == ACCESSIBLE){
+				printf("bien jouer\n");
+				//played = 1;
+			}
+			//Si on click sur un autre de nos pions
+			if ( isMovablePawn(game, p) ){
+				resetBoardAccessibility(game);
+				game->board[p.x][p.y].state = SELECTED;
+			}
+		}
+
+
+
 
 	}
 }

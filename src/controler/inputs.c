@@ -6,7 +6,7 @@ void waitClick(Point * point){
 
 	int x, y;
 	SDL_Event event;
-	
+
 	SDL_WaitEvent(&event);
 
 	switch (event.type) {
@@ -98,22 +98,6 @@ void mouvPawn(Game * game, Point position){
 	}
 }
 
-void stockToBoard(Game * game){
-
-	Point point;
-
-	//select the position of the new pawn
-	do {
-		waitClick(&point);
-
-	} while(game->board[point.x][point.y].state!=EMPTY);
-
-	if (game->currentPlayer==0) {
-		game->white.stock --;
-	}else{
-		game->black.stock --;
-	}
-}
 
 int isInBoard_coord(Point mouse_pos){
 	Point point = isoToCart(mouse_pos);
