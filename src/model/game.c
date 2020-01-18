@@ -22,6 +22,10 @@ void initGame(Game * game){
     strcpy(newplayer.name,"Noir");
     newplayer.color = BLACK;
 
+    Point newPoint = {-1,-1};
+    newplayer.historyMove[0] = newPoint;
+    newplayer.historyMove[1] = newPoint;
+
     game->black = newplayer;
 
     newplayer.color = WHITE;
@@ -93,6 +97,12 @@ void setBoardAccessibility(Game * game,Point point){
   int tuple[4][2] = {{0,1},{1,0},{-1,0},{0,-1}};
 	int state,color;
   Point p;
+  Player * player = NULL;
+
+  if(game->currentPlayer == BLACK)
+    player = &(game->black);
+  else
+    player = &(game->white);
 
   //Définie les cases accessible et selectionné
 	game->board[point.x][point.y].state = SELECTED;
@@ -104,8 +114,8 @@ void setBoardAccessibility(Game * game,Point point){
   		state = game->board[p.x][p.y].state;
   		color = game->board[p.x][p.y].color;
 
-  		//Si la case autour est vide elle est accessible
-  		if (state == EMPTY){
+  		//Si la case autour est vide elle est accessible et que le mouvement est différent du mouvement historique
+  		if (state == EMPTY && !((point.x == player->historyMove[1].x && point.y == player->historyMove[1].y ) && (player->historyMove[0].x == p.x && player->historyMove[0].y == p.y))){
   			game->board[p.x][p.y].state = ACCESSIBLE;
   		}else if(state == FILL && color != game->currentPlayer){
   			//Si la case est rempli par un pion d'un autre joueur
@@ -114,11 +124,24 @@ void setBoardAccessibility(Game * game,Point point){
   				game->board[p.x+tuple[i][0]][p.y+tuple[i][1]].state = ACCESSIBLE;
   			}
   		}
+
     }
 	}
 }
 
 int movePawn(Game * game, Point src ,Point dst){
+
+  Player * player = NULL;
+  if(game->currentPlayer == BLACK)
+    player = &(game->black);
+  else
+    player = &(game->white);
+
+  player->historyMove[0].x = src.x;
+  player->historyMove[0].y = src.y;
+  player->historyMove[1].x = dst.x;
+  player->historyMove[1].y = dst.y;
+
   //renvoie un si un pion a été manger
   game->board[src.x][src.y].state = EMPTY;
   game->board[dst.x][dst.y].state = FILL;

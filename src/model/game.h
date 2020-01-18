@@ -17,6 +17,7 @@ typedef struct {
 	int score;
 	char name[MAX_NAME_LENGTH];
 	int color;
+	Point historyMove[2];
 } Player;
 
 typedef struct {
