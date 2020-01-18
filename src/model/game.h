@@ -56,3 +56,4 @@ int movePawn(Game * game, Point src ,Point dst);
 int nbPawnOnBoardPlayer(Game * game, int player);
 
 void nextPlayer(Game * game);
+Player * getWinner(Game * game);

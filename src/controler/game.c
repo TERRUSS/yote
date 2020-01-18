@@ -4,7 +4,8 @@
 void gameLoop (Game * game) {
 	int version = 0;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
 	Point click;
-	int winner = 0;
+	int inGame = 1;
+	Player * winner;
 
 	displayPlayerName(game);
 	updateBoard(game);
@@ -37,11 +38,13 @@ void gameLoop (Game * game) {
 				}
 			}
 		}else{
-			winner = 1;
+			inGame = 0;
+			winner = getWinner(game);
 		}
-	} while(!winner);
+	} while(inGame);
 
-	printf("The winner is : %s",game->white.name);
+
+	printf("The winner is : %s",winner->name);
 
 }
 
