@@ -44,14 +44,15 @@ typedef struct {
 
 void initGame( Game * game);
 void game(Game * game);
-int checkVictory(Game * game);
 int pickPlayer ();
 void roundPlayer (Game * game);
 
+int checkVictory(int version,Game * game);
 int isMovablePawn(Game * game, Point point);
 int isInStock(Game * game,Point click);
 void resetBoardAccessibility(Game * game);
 void setBoardAccessibility(Game * game,Point point);
-void movePawn(Game * game, Point src ,Point dst);
+int movePawn(Game * game, Point src ,Point dst);
+int nbPawnOnBoardPlayer(Game * game, int player);
 
 void nextPlayer(Game * game);

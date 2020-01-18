@@ -7,3 +7,4 @@
 void gameLoop (Game * game);
 void placePawnFromStock(Game * game);
 void moveLoop(Game * game,Point point);
+void takePawn(Game * game);

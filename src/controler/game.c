@@ -2,7 +2,7 @@
 #include "game.h"
 
 void gameLoop (Game * game) {
-
+	int version = 0;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
 	Point click;
 	int winner = 0;
 
@@ -10,34 +10,38 @@ void gameLoop (Game * game) {
 	updateBoard(game);
 	render();
 
+
 	do{
+		game->round++;
+		if (!checkVictory(version,game)){
+			click.x = -1; click.y = -1;
+			waitClick(&click);
 
-		click.x = -1; click.y = -1;
-		waitClick(&click);
+			if (click.x != -1 && click.y != -1){
+				Point point = isoToCart(click);
 
-		if (click.x != -1 && click.y != -1){
-			Point point = isoToCart(click);
+				//dans le plateau
+				if ( isInBoard(point) ) {
 
-			//dans le plateau
-			if ( isInBoard(point) ) {
+					if ( isMovablePawn(game, point) ){
+						moveLoop(game, point);
+					}
 
-				if ( isMovablePawn(game, point) ){
-					moveLoop(game, point);
+					updateBoard(game);
+					render();
+
+				}else if(isInStock(game,click)){
+					placePawnFromStock(game);
+					updateBoard(game);
+					render();
 				}
-
-				updateBoard(game);
-				render();
-
-			}else if(isInStock(game,click)){
-				placePawnFromStock(game);
-				updateBoard(game);
-				render();
 			}
+		}else{
+			winner = 1;
 		}
-
-
-		// winner = checkWinner(game);
 	} while(!winner);
+
+	printf("The winner is : %s",game->white.name);
 
 }
 
@@ -95,7 +99,11 @@ void moveLoop(Game * game,Point src){
 			//si on fais un bon deplacement
 			if (game->board[p.x][p.y].state == ACCESSIBLE){
 				resetBoardAccessibility(game);
-				movePawn(game,src,p);
+				if (movePawn(game,src,p)){//on deplace le pion si un pion est manger
+					updateBoard(game);
+					render();
+					takePawn(game);
+				}
 				nextPlayer(game);
 				displayPlayerName(game);
 				played = 1;
@@ -115,6 +123,49 @@ void moveLoop(Game * game,Point src){
 			resetBoardAccessibility(game);
 			played=1;
 			placePawnFromStock(game);
+		}
+	}
+}
+
+//attend que le joueur courant prenne un pion adverse
+void takePawn(Game * game){
+	Point click;
+	int took = 0;
+	Player* adverse;
+	if (game->currentPlayer == BLACK)
+		adverse = &(game->white);
+	else
+		adverse = &(game->black);
+
+	printf("Vous pouvez manger un autre pion adverse !\n");
+	//Si l'adversaire n'a plus de pion sur sont plateau
+	if (nbPawnOnBoardPlayer(game,adverse->color) == 0){
+		if(adverse->stock > 1){
+			adverse->stock--;
+			printf("Pas de pions adverse sur le plateau ! Un pion de ca réserve a donc été supprimé\n");
+		}else if(adverse->stock == 1){
+			adverse->stock--;
+			printf("Le dernier pion de l'adversaire a été manger ! il a perdu !\n");
+		}else{
+			printf("l'adversaire n'a plus de pions il a donc perdu !\n");
+		}
+		took = 1;
+	}
+	//attend que le joueur deplace sont pion
+	while(!took){
+		click.x = -1; click.y = -1;
+		waitClick(&click);
+		Point p = isoToCart(click);
+
+		if ( isInBoard(p) ) {
+			//si on fais un bon click
+			if (game->board[p.x][p.y].state == FILL && game->board[p.x][p.y].color != game->currentPlayer){
+				game->board[p.x][p.y].state = EMPTY;
+				took = 1;
+			}
+			else{
+				printf("Vous ne pouvez pas manger ce pion\n");
+			}
 		}
 	}
 }

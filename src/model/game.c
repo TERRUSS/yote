@@ -31,6 +31,23 @@ void initGame(Game * game){
     game->round = 0;
 
 }
+int checkVictory(int version,Game * game){
+  if (game->round > 2 && version == 0){
+    if ((nbPawnOnBoardPlayer(game,BLACK) == 0 && game->black.stock == 0) || (nbPawnOnBoardPlayer(game,WHITE) == 0 && game->white.stock == 0)){
+      return 1;
+    }else{
+      return 0;
+    }
+  }else if (game->round > 2 && version == 1){
+    if (nbPawnOnBoardPlayer(game,BLACK) == 0 || nbPawnOnBoardPlayer(game,WHITE) == 0){
+      return 1;
+    }else{
+      return 0;
+    }
+  }
+  return 0;
+
+}
 /*
 int checkVictory(Game * game){
 
@@ -149,7 +166,8 @@ void setBoardAccessibility(Game * game,Point point){
 	}
 }
 
-void movePawn(Game * game, Point src ,Point dst){
+int movePawn(Game * game, Point src ,Point dst){
+  //renvoie un si un pion a été manger
   game->board[src.x][src.y].state = EMPTY;
   game->board[dst.x][dst.y].state = FILL;
   game->board[dst.x][dst.y].color = game->currentPlayer;
@@ -165,6 +183,7 @@ void movePawn(Game * game, Point src ,Point dst){
     eat.y = dst.y;
     game->board[eat.x][eat.y].state = EMPTY;
     printf("pion manger sur l'axe x src:%d;%d,dst:%d;%d,milieu:%d;%d\n",src.x,src.y,dst.x,dst.y,eat.x,eat.y);
+    return 1;
   }
   else if(diff_y == -2 || diff_y == 2){
     if (diff_y == 2)
@@ -174,10 +193,23 @@ void movePawn(Game * game, Point src ,Point dst){
     eat.x = dst.x;
     game->board[eat.x][eat.y].state = EMPTY;
     printf("pion manger sur l'axe y src:%d;%d,dst:%d;%d,milieu:%d;%d\n",src.x,src.y,dst.x,dst.y,eat.x,eat.y);
-
+    return 1;
   }
+  return 0;
 }
 
 void nextPlayer(Game * game){
   game->currentPlayer = (game->currentPlayer+1)%2;
+}
+
+
+int nbPawnOnBoardPlayer(Game * game, int player){
+  int nb = 0;
+  for (int r = 0; r < CELL_R; r++) {
+		for (int c = CELL_C-1; c >= 0; c--) {
+      if (game->board[r][c].state == FILL && game->board[r][c].color == player )
+        nb++;
+    }
+  }
+  return nb;
 }
