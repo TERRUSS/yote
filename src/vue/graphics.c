@@ -133,10 +133,17 @@ void displayBoard(Game * game){
 
 			if (game->board[r][c].state == FILL || game->board[r][c].state == SELECTED ) {
 				if (game->board[r][c].color == WHITE) {
-					print_pawn(WHITE, pt);
+					if (game->currentPlayer == WHITE)
+						print_pawn(WHITE, pt,PAWN_SELECT_OPACITY);
+					else
+						print_pawn(WHITE, pt,PAWN_UNSELECT_OPACITY);
+
 				}
 				else if (game->board[r][c].color == BLACK) {
-					print_pawn(BLACK, pt);
+					if (game->currentPlayer == BLACK)
+						print_pawn(BLACK, pt,PAWN_SELECT_OPACITY);
+					else
+						print_pawn(BLACK, pt,PAWN_UNSELECT_OPACITY);
 				}
 			}
 		}
@@ -174,11 +181,11 @@ void print_board_cell(int color, Point pt){
 	}
 }
 
-void print_pawn(int color, Point pt){
+void print_pawn(int color, Point pt,Uint8 alpha){
 		SDL_Texture* pTexture = 0;
 
-	 if (color == WHITE) pTexture = SDL_CreateTextureFromSurface(renderer, white_pawn_sprite); // Préparation du pawn_sprite
-	 else pTexture = SDL_CreateTextureFromSurface(renderer, black_pawn_sprite); // Préparation du pawn_sprite
+	 if (color == WHITE){ SDL_SetSurfaceAlphaMod(white_pawn_sprite,alpha);pTexture = SDL_CreateTextureFromSurface(renderer,white_pawn_sprite);} // Préparation du pawn_sprite
+	 else{SDL_SetSurfaceAlphaMod(black_pawn_sprite,alpha); pTexture = SDL_CreateTextureFromSurface(renderer, black_pawn_sprite);} // Préparation du pawn_sprite
 
 	if ( pTexture ) {
 		SDL_Rect dest = { pt.x+SPRITE_WIDTH/4, pt.y+SPRITE_WIDTH/10, SPRITE_WIDTH/2, SPRITE_WIDTH/2};
@@ -200,7 +207,24 @@ void print_score(Player * player) {
 	print(pt,text,WHITE);
 
 }
-void print_stock(int color, int number){
+
+void print_select_stock(int color,int number){
+	Point pt;
+
+	if (color == BLACK){
+		pt.x = 0;
+	}else{
+		pt.x = WINDOW_WIDTH-SPRITE_WIDTH;
+	}
+	pt.y=WINDOW_HEIGHT-30-50;
+
+	SDL_Rect rectangle = {pt.x,pt.y-(10*number),(SPRITE_WIDTH),(10*number)+50};
+
+	SDL_SetRenderDrawColor(renderer,200,0,0,150);
+	SDL_RenderDrawRect(renderer,&rectangle);
+}
+
+void print_stock(int color, int number,Uint8 alpha){
 	Point pt;
 	char text[25];
 
@@ -220,7 +244,7 @@ void print_stock(int color, int number){
 	print(pt,text,WHITE);
 	pt.y-=50;
 	for(int i = 0;i<number;i++){
-		print_pawn(color,pt);
+		print_pawn(color,pt,alpha);
 		pt.y-=10;
 	}
 
@@ -231,13 +255,16 @@ void updateBoard(Game * game) {
 	backgroundColor(222, 49, 99);
 	displayBoard(game);
 
-	print_stock(BLACK, game->black.stock);
-	print_stock(WHITE, game->white.stock);
 
-	if (game->currentPlayer == BLACK)
+	if (game->currentPlayer == BLACK){
+		print_stock(BLACK, game->black.stock,PAWN_SELECT_OPACITY);
+		print_stock(WHITE, game->white.stock,PAWN_UNSELECT_OPACITY);
 		print_score(&(game->black));
-	else
+	}else{
+		print_stock(WHITE, game->white.stock,PAWN_SELECT_OPACITY);
+		print_stock(BLACK, game->black.stock,PAWN_UNSELECT_OPACITY);
 		print_score(&(game->white));
+	}
 
 	displayPlayerName(game);
 }
