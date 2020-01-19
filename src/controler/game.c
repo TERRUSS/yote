@@ -18,6 +18,7 @@ Player * gameLoop (Game * game, int mode) {
 
 			if(mode == 2 && game->currentPlayer == BLACK ){
 				play_ia(game);
+				
 				updateBoard(game);
 				render();
 			}else{
