@@ -13,7 +13,6 @@ Player * gameLoop (Game * game, int mode) {
 
 
 	do{
-		game->round++;
 		if (!checkVictory(version,game)){
 
 			if(mode == 2 && game->currentPlayer == BLACK ){
@@ -82,6 +81,7 @@ void placePawnFromStock(Game * game){
 
 			//change de joueur;
 			nextPlayer(game);
+			game->round++;
 		}
 		//si on reclick dans le stock quitte le placement
 		else if(isInStock(game,click)){
@@ -115,6 +115,7 @@ void moveLoop(Game * game,Point src){
 					takePawn(game);
 				}
 				nextPlayer(game);
+				game->round++;
 				displayPlayerName(game);
 				played = 1;
 			}
