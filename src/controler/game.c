@@ -1,13 +1,13 @@
 
 #include "game.h"
 
-void gameLoop (Game * game) {
+Player * gameLoop (Game * game) {
 	int version = 0;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
 	Point click;
 	int inGame = 1;
 	Player * winner;
 
-	displayPlayerName(game);
+
 	updateBoard(game);
 	render();
 
@@ -43,9 +43,7 @@ void gameLoop (Game * game) {
 		}
 	} while(inGame);
 
-
-	printf("The winner is : %s",winner->name);
-
+	return winner;
 }
 
 //attend que le joueur courant place sont pion sur une case vide du plateau
@@ -76,7 +74,6 @@ void placePawnFromStock(Game * game){
 
 			//change de joueur;
 			nextPlayer(game);
-			displayPlayerName(game);
 		}
 		//si on reclick dans le stock quitte le placement
 		else if(isInStock(game,click)){
@@ -91,6 +88,8 @@ void moveLoop(Game * game,Point src){
 	int played = 0;
 
 	setBoardAccessibility(game,src);
+	updateBoard(game);
+	render();
 
 	//attend que le joueur deplace sont pion
 	while(!played){
@@ -116,6 +115,8 @@ void moveLoop(Game * game,Point src){
 				resetBoardAccessibility(game);
 				src.x = p.x;src.y = p.y;
 				setBoardAccessibility(game,p);
+				updateBoard(game);
+				render();
 			}
 			else{
 				printf("Deplacement impossible\n");

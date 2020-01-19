@@ -1,6 +1,7 @@
 
 #include "graphics.h"
 #include <stdio.h>
+#include <unistd.h>
 
 /*---------------- UTILS ----------------*/
 
@@ -43,7 +44,13 @@ void initGraphics(){
 
 	printLog(LOGGING_STEP, "Loading fonts");
 	TTF_Init();
-	font = TTF_OpenFont("/home/tmo/Code/yote/src/assets/fonts/font.ttf", 24);
+	char cwd[250],cwd_font[500];
+  getcwd(cwd, sizeof(cwd));
+	sprintf(cwd_font,"%s/src/assets/fonts/font.ttf",cwd);
+	if (!(font = TTF_OpenFont(cwd_font, 24))){
+		printLog(STEP_ERROR, TTF_GetError());
+		quitGraphics();
+	}
 
 	printLog(FINISHED_TASK, "Initialisation Completed");
 }
@@ -71,6 +78,7 @@ void render(){
 
 
 void print (Point pt, char* string, int color) {
+
 	switch (color) {
 		case WHITE:
 			textColor.r = 255;
@@ -83,18 +91,19 @@ void print (Point pt, char* string, int color) {
 			textColor.b = 0;
 			break;
 	}
-	textColor.a = 0;
-
+	textColor.a = 255;
 
 	int text_width, text_height;
 
 	textSurface = TTF_RenderText_Solid(font, string, textColor);
+
 	SDL_Texture * text = (SDL_Texture*)SDL_CreateTextureFromSurface(renderer, textSurface);
+
 	text_width = textSurface->w;
 	text_height = textSurface->h;
 
 	SDL_FreeSurface(textSurface);
-	SDL_Rect renderQuad = { 20, 50, text_width, text_height };
+	SDL_Rect renderQuad = { pt.x, pt.y, text_width, text_height };
 	SDL_RenderCopy(renderer, text, NULL, &renderQuad);
 
 	SDL_DestroyTexture(text);
@@ -115,7 +124,14 @@ void displayBoard(Game * game){
 
 			print_board_cell( ((r+c)%2) ? WHITE : BLACK, pt);
 
-			if (game->board[r][c].state == FILL) {
+			if (game->board[r][c].state == ACCESSIBLE){
+				SDL_Rect rectangle = {pt.x+HIT_BOX_HEIGHT/2.3,pt.y+HIT_BOX_HEIGHT/3.8,HIT_BOX_HEIGHT/2,HIT_BOX_WIDTH/2};
+
+				SDL_SetRenderDrawColor(renderer,200,0,0,150);
+				SDL_RenderDrawRect(renderer,&rectangle);
+			}
+
+			if (game->board[r][c].state == FILL || game->board[r][c].state == SELECTED ) {
 				if (game->board[r][c].color == WHITE) {
 					print_pawn(WHITE, pt);
 				}
@@ -129,6 +145,14 @@ void displayBoard(Game * game){
 	// printLog(FINISHED_TASK, "Ok");
 }
 
+void print_hover_cell(Point coord){
+	coord = cartToIso(isoToCart(coord));
+	SDL_Rect rectangle = {coord.x+HIT_BOX_HEIGHT/2.3,coord.y+HIT_BOX_HEIGHT/3.8,HIT_BOX_HEIGHT/2,HIT_BOX_WIDTH/2};
+
+	SDL_SetRenderDrawColor(renderer,0,0,255,150);
+	SDL_RenderDrawRect(renderer,&rectangle);
+
+}
 void print_board_cell(int color, Point pt){
 	SDL_Texture* pTexture;
 
@@ -158,26 +182,43 @@ void print_pawn(int color, Point pt){
 
 	if ( pTexture ) {
 		SDL_Rect dest = { pt.x+SPRITE_WIDTH/4, pt.y+SPRITE_WIDTH/10, SPRITE_WIDTH/2, SPRITE_WIDTH/2};
-
 		SDL_RenderCopy(renderer, pTexture, NULL, &dest); // Copie du pawn_sprite grâce au SDL_Renderer
-
 		SDL_DestroyTexture(pTexture); // Libération de la mémoire associée à la texture
 
 	} else {
 		printLog(STEP_ERROR, SDL_GetError());
 	}
 }
+void print_score(Player * player) {
+	Point pt;
+	char text[50+MAX_NAME_LENGTH];
 
+	pt.x = 15;
+	pt.y= 50;
+
+	sprintf(text,"Score : %d",player->score);
+	print(pt,text,WHITE);
+
+}
 void print_stock(int color, int number){
 	Point pt;
+	char text[25];
+
 	if (color == BLACK){
 		pt.x = 0;
 	}else{
-		pt.x = WINDOW_WIDTH-SPRITE_WIDTH;;
+		pt.x = WINDOW_WIDTH-SPRITE_WIDTH;
 	}
+	pt.y=WINDOW_HEIGHT-30-50;
 
-	pt.y=WINDOW_HEIGHT-SPRITE_WIDTH;
+	if(number < 10)
+		sprintf(text,"    %d",number);
+	else
+		sprintf(text,"   %d",number);
 
+	pt.y+=50;
+	print(pt,text,WHITE);
+	pt.y-=50;
 	for(int i = 0;i<number;i++){
 		print_pawn(color,pt);
 		pt.y-=10;
@@ -192,6 +233,13 @@ void updateBoard(Game * game) {
 
 	print_stock(BLACK, game->black.stock);
 	print_stock(WHITE, game->white.stock);
+
+	if (game->currentPlayer == BLACK)
+		print_score(&(game->black));
+	else
+		print_score(&(game->white));
+
+	displayPlayerName(game);
 }
 
 void backgroundColor(int r, int g, int b){
@@ -206,11 +254,12 @@ void backgroundColor(int r, int g, int b){
 }
 
 void displayPlayerName(Game * game){
-
+	Point pt = {15,15};
+	char text[MAX_NAME_LENGTH+10];
 	if (game->currentPlayer == BLACK){
-		printf("Joueur : %s\n",game->black.name);
+		sprintf(text,"Joueur : %s",game->black.name);
 	}else{
-		printf("Joueur : %s\n",game->white.name);
+		sprintf(text,"Joueur : %s",game->white.name);
 	}
-
+	print(pt,text,WHITE);
 }

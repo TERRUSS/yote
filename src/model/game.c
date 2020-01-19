@@ -124,7 +124,6 @@ void setBoardAccessibility(Game * game,Point point){
   				game->board[p.x+tuple[i][0]][p.y+tuple[i][1]].state = ACCESSIBLE;
   			}
   		}
-
     }
 	}
 }
@@ -157,7 +156,7 @@ int movePawn(Game * game, Point src ,Point dst){
       eat.x= dst.x-1;
     eat.y = dst.y;
     game->board[eat.x][eat.y].state = EMPTY;
-    printf("pion manger sur l'axe x src:%d;%d,dst:%d;%d,milieu:%d;%d\n",src.x,src.y,dst.x,dst.y,eat.x,eat.y);
+    player->score++;
     return 1;
   }
   else if(diff_y == -2 || diff_y == 2){
@@ -167,13 +166,22 @@ int movePawn(Game * game, Point src ,Point dst){
       eat.y= dst.y-1;
     eat.x = dst.x;
     game->board[eat.x][eat.y].state = EMPTY;
-    printf("pion manger sur l'axe y src:%d;%d,dst:%d;%d,milieu:%d;%d\n",src.x,src.y,dst.x,dst.y,eat.x,eat.y);
+    player->score++;
     return 1;
   }
   return 0;
 }
 
 void nextPlayer(Game * game){
+  int nbPawn = nbPawnOnBoardPlayer(game,game->currentPlayer);
+
+  //On rajoute au score le nombre de pion restant sur le plateau au joueur a la fin du tour
+  if (game->currentPlayer == BLACK){
+    game->black.score += nbPawn;
+  }else{
+    game->white.score += nbPawn;
+  }
+
   game->currentPlayer = (game->currentPlayer+1)%2;
 }
 

@@ -4,7 +4,7 @@
 #include "../model/game.h"
 #include "../vue/utils.h"
 
-void gameLoop (Game * game);
+Player *  gameLoop (Game * game);
 void placePawnFromStock(Game * game);
 void moveLoop(Game * game,Point point);
 void takePawn(Game * game);
