@@ -1,7 +1,7 @@
 
 #include "menu.h"
 
-void firstMenu(Game * game) {
+int firstMenu(Game * game) {
 	int mode = 0;
 	mode = selectMode();
 
@@ -13,6 +13,8 @@ void firstMenu(Game * game) {
 			getPlayerName(game, mode);
 			break;
 	}
+
+	return mode;
 }
 
 
@@ -170,6 +172,8 @@ void getPlayerName (Game * game, int mode){
 	recordText( game->white.name, j1);
 	if (mode == 1) {
 		recordText( game->black.name, j2);
+	}else{
+		strcpy(game->black.name,"IA");
 	}
 	printf("White player name : %s\n", game->white.name);
 	if (mode == 1) {

@@ -9,13 +9,13 @@ int main(void) {
 
 
 	// welcome menu - players setup
-	firstMenu(&game);
+	int mode =firstMenu(&game);
 
 	game.currentPlayer = pickPlayer();
 
 	/*---------------- GAME LOOP ----------------*/
 
-		Player * winner = gameLoop(&game);
+		Player * winner = gameLoop(&game,mode);
 		printf("The winner is : %s score : %d\n",winner->name,winner->score);
 
 	/*

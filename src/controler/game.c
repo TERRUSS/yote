@@ -1,7 +1,7 @@
 
 #include "game.h"
 
-Player * gameLoop (Game * game) {
+Player * gameLoop (Game * game, int mode) {
 	int version = 0;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
 	Point click;
 	int inGame = 1;
@@ -15,26 +15,33 @@ Player * gameLoop (Game * game) {
 	do{
 		game->round++;
 		if (!checkVictory(version,game)){
-			click.x = -1; click.y = -1;
-			waitClick(&click);
 
-			if (click.x != -1 && click.y != -1){
-				Point point = isoToCart(click);
+			if(mode == 2 && game->currentPlayer == BLACK ){
+				play_ia(game);
+				updateBoard(game);
+				render();
+			}else{
+				click.x = -1; click.y = -1;
+				waitClick(&click);
 
-				//dans le plateau
-				if ( isInBoard(point) ) {
+				if (click.x != -1 && click.y != -1){
+					Point point = isoToCart(click);
 
-					if ( isMovablePawn(game, point) ){
-						moveLoop(game, point);
+					//dans le plateau
+					if ( isInBoard(point) ) {
+
+						if ( isMovablePawn(game, point) ){
+							moveLoop(game, point);
+						}
+
+						updateBoard(game);
+						render();
+
+					}else if(isInStock(game,click)){
+						placePawnFromStock(game);
+						updateBoard(game);
+						render();
 					}
-
-					updateBoard(game);
-					render();
-
-				}else if(isInStock(game,click)){
-					placePawnFromStock(game);
-					updateBoard(game);
-					render();
 				}
 			}
 		}else{

@@ -11,7 +11,7 @@
 
 #define LEN_MAX 50
 
-void firstMenu(Game * game);
+int firstMenu(Game * game);
 void recordText(char * input, Point inputPosition);
 int selectMode ();
 void getPlayerName (Game * game, int mode);
