@@ -16,7 +16,7 @@ int main(void) {
 	/*---------------- GAME LOOP ----------------*/
 
 		Player * winner = gameLoop(&game);
-		printf("The winner is : %s\n",winner->name);
+		printf("The winner is : %s score : %d\n",winner->name,winner->score);
 
 	/*
 	do {
