@@ -61,8 +61,14 @@ void placePawnFromStock(Game * game){
 	//si la réserve est vide ne rentre pas dans la boucle
 	if ((game->currentPlayer == BLACK && game->black.stock <=0) || (game->currentPlayer == WHITE && game->white.stock<=0))
 		place = 1;
-	else
+	else{
+		if (game->currentPlayer == BLACK)
+			print_select_stock(game->currentPlayer,game->black.stock);
+		else
+			print_select_stock(game->currentPlayer,game->white.stock);
+		render();
 		printf("Cliquer sur une case vide pour placer un pion - pour annuler cliquer de nouveau sur la reserve\n");
+	}
 
 	//attend que le joueur place un pion
 	while(!place){

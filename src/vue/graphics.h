@@ -21,6 +21,9 @@
 #define HIT_BOX_WIDTH 51
 #define HIT_BOX_HEIGHT 53
 
+#define PAWN_SELECT_OPACITY 255
+#define PAWN_UNSELECT_OPACITY 200
+
 // enum {WHITE, BLACK}
 
 SDL_Window* window;
@@ -41,14 +44,15 @@ void print (Point pt, char* text, int color);
 
 /*--------- PRINTING FUNCTIONS ----------*/
 void print_board_cell(int color, Point pt);
-void print_pawn(int color, Point pt);
-void print_stock(int color, int number);
+void print_pawn(int color, Point pt,Uint8 alpha);
+void print_stock(int color, int number,Uint8 alpha);
 void displayBoard(Game * game);
 void backgroundColor(int r, int g, int b);
 void updateBoard(Game * game);
 void displayPlayerName(Game * game);
 void print_hover_cell(Point coord);
 void print_score(Player * player);
+void print_select_stock(int color,int number);
 
 void VictoryScreen (Player * winner);
 void printLeaderboard();
