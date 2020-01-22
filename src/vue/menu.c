@@ -34,12 +34,12 @@ void recordText(char * input, Point inputPosition) {
 
 	while(1) {
 		// clear screen
-		SDL_SetRenderDrawColor(renderer, 222, 49, 99, 255);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 		SDL_Rect rectangle;
 		rectangle.x = inputPosition.x;
 		rectangle.y = inputPosition.y;
 		rectangle.w = WINDOW_WIDTH;
-		rectangle.h = 50;
+		rectangle.h = 30;
 		SDL_RenderFillRect(renderer, &rectangle);
 
 
@@ -110,44 +110,45 @@ int selectMode (){
 	int check = 0;
 
 	SDL_RenderClear(renderer);
-	backgroundColor(222, 49, 99);
+	// backgroundColor(222, 49, 99);
+	backgroundImage(0);
 	SDL_SetRenderDrawColor(renderer, 222, 49, 99, 255);
 	SDL_Rect rectangle;
-	rectangle.w = 200;
-	rectangle.h = 50;
+	rectangle.w = BTN_WIDTH;
+	rectangle.h = BTN_HEIGHT;
 
 
 	JvJ.x = 20;
-	JvJ.y = 50;
+	JvJ.y = 100;
 	rectangle.x = JvJ.x;
 	rectangle.y = JvJ.y;
-	SDL_RenderFillRect(renderer, &rectangle);
+	// SDL_RenderFillRect(renderer, &rectangle);
 
 	JvIA.x = 20;
-	JvIA.y = 150;
+	JvIA.y = 250;
 	rectangle.x = JvIA.x;
 	rectangle.y = JvIA.y;
-	SDL_RenderFillRect(renderer, &rectangle);
+	// SDL_RenderFillRect(renderer, &rectangle);
 
 	score.x = 20;
-	score.y = 250;
+	score.y = 400;
 	rectangle.x = score.x;
 	rectangle.y = score.y;
-	SDL_RenderFillRect(renderer, &rectangle);
+	// SDL_RenderFillRect(renderer, &rectangle);
 
-	print(JvJ, "Joueur VS Joueur", WHITE);
-	print(JvIA, "Joueur VS IA", WHITE);
-	print(score, "Score", WHITE);
+	print_button(JvJ, JVJ);
+	print_button(JvIA, JVIA);
+	print_button(score, SCORE);
 	render();
 
 	do {
 		waitClick(&click);
 
-		if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 50 + rectangle.h )&&(click.y >= 50 ))) {
+		if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 100 + rectangle.h )&&(click.y >= 100 ))) {
 			check = 1;
-		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 150 + rectangle.h )&&(click.y >= 150 ))) {
+		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 250 + rectangle.h )&&(click.y >= 200 ))) {
 			check = 2;
-		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 250 + rectangle.h )&&(click.y >= 250 ))) {
+		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 400 + rectangle.h )&&(click.y >= 400 ))) {
 			check = 3;
 		}
 	} while(check == 0);
@@ -164,7 +165,8 @@ void getPlayerName (Game * game, int mode){
 	int select;
 
 	SDL_RenderClear(renderer);
-	backgroundColor(222, 49, 99);
+	backgroundImage(0);
+	// backgroundColor(222, 49, 99);
 
 	j1.x = 20; j1.y = 50;
 	j2.x = 20; j2.y = 100;
@@ -182,6 +184,7 @@ void getPlayerName (Game * game, int mode){
 
 	recordText( game->white.name, j1);
 	if (mode == 1) {
+		print(j1, game->white.name, WHITE);
 		recordText( game->black.name, j2);
 	}else{
 		strcpy(game->black.name,"IA");

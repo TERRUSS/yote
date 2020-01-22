@@ -32,6 +32,12 @@ void initGraphics(){
 	cell_sprite_red = IMG_Load("./src/assets/board_red.png");
 	white_pawn_sprite = IMG_Load("./src/assets/pawn_white.png");
 	black_pawn_sprite = IMG_Load("./src/assets/pawn_black.png");
+	menubg = IMG_Load("./src/assets/menubg.png");
+
+	btn_jvj = IMG_Load("./src/assets/buttons/jvj.png");
+	btn_jvia = IMG_Load("./src/assets/buttons/jvia.png");
+	btn_score = IMG_Load("./src/assets/buttons/score.png");
+	btn_back = IMG_Load("./src/assets/buttons/back.png");
 
 	if ( cell_sprite_blue && cell_sprite_red && white_pawn_sprite && black_pawn_sprite ) {
 		printLog(LOGGING_STEP, "Assets Loaded");
@@ -194,7 +200,6 @@ void print_score(Player * player) {
 
 	sprintf(text,"Score : %d",player->score);
 	print(pt,text,WHITE);
-
 }
 
 void print_select_stock(int color,int number){
@@ -269,6 +274,25 @@ void backgroundColor(int r, int g, int b){
 	SDL_RenderFillRect(renderer, &rectangle);
 }
 
+void backgroundImage(int image){
+	SDL_Texture* pTexture = 0;
+
+	pTexture = SDL_CreateTextureFromSurface(renderer, menubg); // Préparation du pawn_sprite
+
+	if ( pTexture ) {
+		SDL_Rect dest = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT};
+		SDL_RenderCopy(renderer, pTexture, NULL, &dest); // Copie du pawn_sprite grâce au SDL_Renderer
+		SDL_DestroyTexture(pTexture); // Libération de la mémoire associée à la texture
+
+	} else {
+		printLog(STEP_ERROR, SDL_GetError());
+		printLog(STEP_ERROR, "Go background color instead");
+		SDL_RenderClear(renderer);
+		backgroundColor(222, 49, 99);
+	}
+}
+
+
 void displayPlayerName(Game * game){
 	Point pt = {15,15};
 	char text[MAX_NAME_LENGTH+10];
@@ -281,6 +305,37 @@ void displayPlayerName(Game * game){
 }
 
 
+void print_button(Point pt, int type){
+		SDL_Texture* pTexture = 0;
+
+	 switch (type) {
+		case JVJ:
+			pTexture = SDL_CreateTextureFromSurface(renderer, btn_jvj);
+			break;
+		case JVIA:
+			pTexture = SDL_CreateTextureFromSurface(renderer, btn_jvia);
+			break;
+		case SCORE:
+			pTexture = SDL_CreateTextureFromSurface(renderer, btn_score);
+			break;
+		case BACK:
+			pTexture = SDL_CreateTextureFromSurface(renderer, btn_back);
+			break;
+	 }
+
+	if ( pTexture ) {
+		SDL_Rect dest = { pt.x, pt.y, BTN_WIDTH, BTN_HEIGHT};
+
+		if (type == BACK){
+			dest.w = BTN_WIDTH/2;
+			dest.h = BTN_HEIGHT/2;
+		}
+
+		SDL_RenderCopy(renderer, pTexture, NULL, &dest); // Copie du pawn_sprite grâce au SDL_Renderer
+		SDL_DestroyTexture(pTexture); // Libération de la mémoire associée à la texture
+	}
+}
+
 /*******************************************/
 
 void VictoryScreen (Player * winner) {
@@ -290,13 +345,20 @@ void VictoryScreen (Player * winner) {
 	SDL_RenderClear(renderer);
 	backgroundColor(222, 49, 99);
 
-	sprintf(text,"VICTOIRE ROYALE\n%s a gange",winner->name);
+	sprintf(text,"VICTOIRE ROYALE");
+	print(pt,text,WHITE);
+	pt.y += 50;
+	sprintf(text,"%s vainqueur",winner->name);
 	print(pt,text,WHITE);
 
 	render();
 
-	Point ok;
-	waitClick(&ok);
+	pt.x = -1;
+	pt.y = -1;
+
+	do{
+		waitClick(&pt);
+	} while(pt.x < 0 && pt.y < 0);
 }
 
 
@@ -321,13 +383,16 @@ void printLeaderboard(){
 		i++;
 	}
 
+	pt.x = 10; pt.y = 10;
+	print_button(pt, BACK);
+
 	render();
 
-	pt.x = 100;
-	pt.y = 100;
+	pt.x = -1;
+	pt.y = -1;
 
 	do{
 		waitClick(&pt);
-	} while(pt.x > 50 && pt.y > 50);
+	} while(pt.x < 0 && pt.y < 0);
 
 }

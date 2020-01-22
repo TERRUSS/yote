@@ -2,31 +2,48 @@
 #include "save.h"
 
 void saveScore (Player * winner) {
-	FILE * score;
+	FILE * scoreFile;
 	Player leaderBoard[10];
-	char tmp;
 	// open the file for writing
-	score = fopen("../../.scores","w");
 
-	fprintf(score, "%s;%d", winner->name, winner->score);
-
+	char score[MAXCHAR] = {0};
 	int i = 0;
-	while(readScore(i, leaderBoard[i].name) && i<10){
-		parseString(&leaderBoard[i]);
+	while(readScore(i, score) && i<10){
+		parseString(&leaderBoard[i], score);
 		i++;
 	}
 
-	sortLeaderBoard(leaderBoard, i);
+	// instertScore(leaderBoard, 0, i, winner);
+	// for (int k = 0; k <= i && k <10; k++) {
+	// 	fprintf("inserted : %s;%d\n", leaderBoard[i].name, leaderBoard[i].score);
+	// }
 
-	instertScore(leaderBoard, i, winner);
+	// printf("\n\n");
 
 		//rewrite the file
-	for (int i = 0; i < 10; i++) {
-		fprintf(score, "%s;%d", leaderBoard[i].name, leaderBoard[i].score);
-	}
+	scoreFile = fopen("./.scores","w");
 
+	int inserted = 0;
+
+
+
+	for (int k = 0; k < i && k < 10; k++) {
+		if (winner->score >= leaderBoard[k].score && !inserted){
+			fprintf(scoreFile, "%s;%d\n", winner->name, winner->score);
+			if (k < 10) {
+				fprintf(scoreFile, "%s;%d\n", leaderBoard[k].name, leaderBoard[k].score);
+			}
+			inserted = 1;
+		}
+		else{
+			fprintf(scoreFile, "%s;%d\n", leaderBoard[k].name, leaderBoard[k].score);
+		}
+	}
+	if (i == 0) {
+		fprintf(scoreFile, "%s;%d\n", winner->name, winner->score);
+	}
 	// close the file
-	fclose(score);
+	fclose(scoreFile);
 }
 
 
@@ -36,7 +53,7 @@ int readScore (int line, char * score) {
 	// char str[MAXCHAR] = {0};
 	scoreFile = fopen("./.scores", "r");
 
-	if (score == NULL){
+	if (scoreFile == NULL){
 		printf("Could not open the score file");
 		return 0;
 	}
@@ -54,56 +71,27 @@ int readScore (int line, char * score) {
 	return ok;
 }
 
-void parseString (Player * player){
+void parseString (Player * player, char * score){
 	char tmp_name[MAXCHAR];
 	char tmp_score[MAXCHAR];
-	int i,j;
 
-	for (int i = 0; i < MAXCHAR ; i++) {
+	int i = 0, offset = 0;
 
-		if (player->name[i] == ';') {
-			for (int j = 0; j < i; j++) {
-				tmp_name[j]=player->name[j];
-			}
-			j=0;
-			while (player->name[j] != 0) {
-				tmp_score[j] = player->name[i+j];
-				j++;
-			}
-		}
+	while (score[i] != ';') {
+		tmp_name[i] = score[i];
+		i++;
 	}
+	tmp_name[i] = '\0';
+	i++;
+	offset = i;
+	while (score[i] != '\0') {
+		tmp_score[i-offset] = score[i];
+		i++;
+	}
+
 
 	strcpy(player->name, tmp_name);
-	sscanf(tmp_score, "%d", player->score); ;
-}
+	sscanf(tmp_score, "%d", &player->score);
+	printf("parsing %s : %s %d ", score, player->name, player->score);
 
-void sortLeaderBoard (Player * leaderBoard, int length){
-
-	Player tmp;
-
-	for (int i = 0; i < length-1; i++) {
-		for (int j = 0; j < length-1 - i; j++ ) {
-			if (leaderBoard[j].score > leaderBoard[j+1].score) {
-				tmp = leaderBoard[j+1];
-				leaderBoard[j+1] = leaderBoard[j];
-				leaderBoard[j] = tmp;
-			}
-		}
-	}
-
-}
-
-void instertScore (Player * leaderBoard, int lenght, Player * winner){
-
-	Player tmp;
-
-	for (int i = 0; i < lenght; i++) {
-		if (leaderBoard[i].score < winner->score) {
-			tmp = leaderBoard[i];
-			leaderBoard[i] = *winner;
-
-			instertScore(leaderBoard, lenght, &tmp);
-			break;
-		}
-	}
 }

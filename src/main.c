@@ -2,26 +2,28 @@
 
 int main(void) {
 
+	int mode = 0;
 	Game game;
 
-	initGame( &game );
 	initGraphics();
 
+	do {
+		initGame( &game );
+		// welcome menu - players setup
+		int mode = firstMenu(&game);
 
-	// welcome menu - players setup
-	int mode = firstMenu(&game);
+		game.currentPlayer = pickPlayer();
 
-	game.currentPlayer = pickPlayer();
+		/*---------------- GAME LOOP ----------------*/
 
-	/*---------------- GAME LOOP ----------------*/
+			Player * winner = gameLoop(&game,mode);
+			printf("The winner is : %s score : %d\n",winner->name,winner->score);
 
-		Player * winner = gameLoop(&game,mode);
-		printf("The winner is : %s score : %d\n",winner->name,winner->score);
+		/*---------------- CONGRATULATION ----------------*/
 
-	/*---------------- CONGRATULATION ----------------*/
-
-	VictoryScreen( winner );
-	saveScore(winner);
+		VictoryScreen( winner );
+		saveScore(winner);
+	} while (!mode);
 
 	quitGraphics();
 

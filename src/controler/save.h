@@ -3,8 +3,8 @@
 
 void saveScore(Player * winner);
 int readScore (int line, char * score);
-void parseString (Player * player);
+void parseString (Player * player, char * score);
 void sortLeaderBoard(Player* leaderBoard, int length);
-void instertScore(Player * leaderBoard, int length, Player * winner);
+void instertScore(Player * leaderBoard,int index, int length, Player * winner);
 
 #define MAXCHAR 256
