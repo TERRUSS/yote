@@ -1,4 +1,4 @@
 #pragma once
 
-int saveScore (Game * game);
-int readScore ();
+int saveScore(Player * winner);
+char * readScore();

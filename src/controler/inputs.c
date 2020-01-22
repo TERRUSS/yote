@@ -24,7 +24,6 @@ void waitClick(Point * point){
 			if (SDL_BUTTON(1) ) {
 				point->x = event.motion.x;
 				point->y = event.motion.y;
-				printf("click\n");
 			}
 	}
 }

@@ -16,27 +16,11 @@ int main(void) {
 	/*---------------- GAME LOOP ----------------*/
 
 		Player * winner = gameLoop(&game);
-		printf("The winner is : %s score : %d\n",winner->name,winner->score);
 
-	/*
-	do {
-
-		showTips();
-
-		round(&game);
-
-		updateBoard();
-
-		//check victory
-		checkVictory(game);
-
-		if (game->black.victory || game->white.victory || game->victory) {
-			quit = 1;
-		}
-	} while( !quit );
-	*/
 	/*---------------- CONGRATULATION ----------------*/
 
+	printf("The winner is : %s score : %d\n", winner->name,winner->score);
+	saveScore(winner);
 	//VictoryScreen( winner );
 
 	quitGraphics();

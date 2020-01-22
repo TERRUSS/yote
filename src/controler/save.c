@@ -1,35 +1,41 @@
 #include <stdio.h>
 
-#define LEN 256
-
-void saveScore (Game * game) {
+void saveScore (Player * winner) {
 	FILE * score;
 	int i;
-	/* open the file for writing*/
-	score = fopen ("./score.txt","w");
+	tab[5];
+	// open the file for writing
+	score = fopen("../.scores","w");
+	for (int i = 0; i < 5; i++) {
+		tab[i]=
+	}
+	fprintf(score, "%s; %d", white->name, white->score);
 
-	/* write 10 lines of text into the file stream*/
-	fprintf(score, "%s; %d|%d\n", game->white.name, game->white.score, game->white.stock);
-
-	/* close the file*/
-	fclose (score);
+	// close the file
+	fclose(score);
 	return 0;
 }
 
 #define MAXCHAR 1000
 
-int readScore () {
+void readScore (int line; char * score) {
 	FILE *score;
 	char str[MAXCHAR];
-	char* filename = "./score.txt";
 
-	score = fopen(filename, "r");
+	score = fopen("../.scores", "r");
 	if (score == NULL){
 		printf("Could not open file %s",filename);
 		return 1;
 	}
-	while (fgets(str, MAXCHAR, score) != NULL)
-		printf("%s", str);
+	// while (fgets(str, MAXCHAR, score) != NULL)
+	// 	printf("%s", str);
+
+	for (int i = 0; i < count && fgets(str, MAXCHAR, score) != NULL; i++) {}
+
+	if (fgets(str, MAXCHAR, score)!= NULL){
+		score = str;
+	}
+
 	fclose(score);
 	return 0;
 }
