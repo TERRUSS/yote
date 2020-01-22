@@ -1,31 +1,40 @@
 
 #include "menu.h"
 
-void getPlayersInfos(Game * game) {
+void firstMenu(Game * game) {
+	int mode = 0;
+	mode = selectMode();
 
-	SDL_StartTextInput();
-	recordText();
-	SDL_StopTextInput();
+	switch (mode) {
+		case 3:
 
+			break;
+		default:
+			getPlayerName(game, mode);
+			break;
+	}
 }
 
 
+void recordText(char * input, Point inputPosition) {
 
-void recordText() {
+	SDL_StartTextInput();
+
 	char rep[LEN_MAX + 1] = {0};
 	size_t len = 0;
 	SDL_Event event;
 
 	Point position;
 
-	SDL_RenderClear(renderer);
-	backgroundColor(222, 49, 99);
-	render();
-
 	while(1) {
-
-		SDL_RenderClear(renderer);
-		backgroundColor(222, 49, 99);
+		// clear screen
+		SDL_SetRenderDrawColor(renderer, 222, 49, 99, 255);
+		SDL_Rect rectangle;
+		rectangle.x = inputPosition.x;
+		rectangle.y = inputPosition.y;
+		rectangle.w = WINDOW_WIDTH;
+		rectangle.h = 50;
+		SDL_RenderFillRect(renderer, &rectangle);
 
 
 		SDL_bool has_type = SDL_FALSE;
@@ -43,7 +52,6 @@ void recordText() {
 			}
 
 			else if(event.key.keysym.sym == SDLK_RETURN) {
-				SDL_FreeSurface(textSurface);
 				break;
 			}
 
@@ -58,7 +66,7 @@ void recordText() {
 			}
 
 			if(event.key.keysym.sym == SDLK_c && (SDL_GetModState() & KMOD_CTRL))
-				SDL_SetClipboardText(rep);
+			SDL_SetClipboardText(rep);
 
 		} else if(event.type == SDL_TEXTINPUT) {
 			size_t l = strlen(event.text.text);
@@ -69,11 +77,102 @@ void recordText() {
 		}
 		if(has_type) {
 
-			position.x = 20;
-			position.y = 50;
-			print(position, rep, WHITE);
+			print(inputPosition, rep, WHITE);
 
 			render();
 		}
+	}
+
+	SDL_StopTextInput();
+
+	for (int i = 0; i<len; i++) {
+		input[i] = rep[i];
+	}
+}
+// /*
+int selectMode (){
+
+	Point click;
+	Point JvJ,JvIA,score;
+	int check = 0;
+
+	SDL_RenderClear(renderer);
+	backgroundColor(222, 49, 99);
+	SDL_SetRenderDrawColor(renderer, 222, 49, 99, 255);
+	SDL_Rect rectangle;
+	rectangle.w = 200;
+	rectangle.h = 50;
+
+
+	JvJ.x = 20;
+	JvJ.y = 50;
+	rectangle.x = JvJ.x;
+	rectangle.y = JvJ.y;
+	SDL_RenderFillRect(renderer, &rectangle);
+
+	JvIA.x = 20;
+	JvIA.y = 150;
+	rectangle.x = JvIA.x;
+	rectangle.y = JvIA.y;
+	SDL_RenderFillRect(renderer, &rectangle);
+
+	score.x = 20;
+	score.y = 250;
+	rectangle.x = score.x;
+	rectangle.y = score.y;
+	SDL_RenderFillRect(renderer, &rectangle);
+
+	print(JvJ, "Joueur VS Joueur", WHITE);
+	print(JvIA, "Joueur VS IA", WHITE);
+	print(score, "Score", WHITE);
+	render();
+
+	do {
+		waitClick(&click);
+
+		if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 50 + rectangle.h )&&(click.y >= 50 ))) {
+			check = 1;
+		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 150 + rectangle.h )&&(click.y >= 150 ))) {
+			check = 2;
+		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 250 + rectangle.h )&&(click.y >= 250 ))) {
+			check = 3;
+		}
+	} while(check == 0);
+
+	return check;
+}
+// */
+
+void getPlayerName (Game * game, int mode){
+
+	Point click;
+	Point j1, j2;
+
+	int select;
+
+	SDL_RenderClear(renderer);
+	backgroundColor(222, 49, 99);
+
+	j1.x = 20; j1.y = 50;
+	j2.x = 20; j2.y = 100;
+
+	print(j1, "Joueur Blanc : ", WHITE);
+
+	if (mode == 1) {
+		print(j2, "Joueur Noir : ", WHITE);
+	}
+
+	render();
+
+	j1.x = 300;
+	j2.x = 300;
+
+	recordText( game->white.name, j1);
+	if (mode == 1) {
+		recordText( game->black.name, j2);
+	}
+	printf("White player name : %s\n", game->white.name);
+	if (mode == 1) {
+		printf("Black player name : %s\n", game->black.name);
 	}
 }

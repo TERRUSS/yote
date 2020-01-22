@@ -9,7 +9,7 @@ int main(void) {
 
 
 	// welcome menu - players setup
-	//getPlayersInfos(&game);
+	firstMenu(&game);
 
 	game.currentPlayer = pickPlayer();
 
