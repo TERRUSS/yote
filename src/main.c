@@ -9,7 +9,7 @@ int main(void) {
 
 
 	// welcome menu - players setup
-	int mode =firstMenu(&game);
+	int mode = firstMenu(&game);
 
 	game.currentPlayer = pickPlayer();
 
@@ -21,7 +21,7 @@ int main(void) {
 	/*---------------- CONGRATULATION ----------------*/
 
 	VictoryScreen( winner );
-	// saveScore(winner);
+	saveScore(winner);
 
 	quitGraphics();
 

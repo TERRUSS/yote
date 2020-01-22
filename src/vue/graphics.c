@@ -56,20 +56,9 @@ void initGraphics(){
 }
 
 void quitGraphics(){
-
-	// Libération des ressources occupées par les sprites, le render et la fenêtre
-
-	SDL_FreeSurface(cell_sprite_blue);
-	SDL_FreeSurface(cell_sprite_red);
-	SDL_FreeSurface(white_pawn_sprite);
-	SDL_FreeSurface(black_pawn_sprite);
-	SDL_DestroyRenderer(renderer);
-
-	TTF_Quit();
-	SDL_FreeSurface(textSurface);
-
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+	exit(0);
 }
 
 void render(){
@@ -274,7 +263,7 @@ void VictoryScreen (Player * winner) {
 	SDL_RenderClear(renderer);
 	backgroundColor(222, 49, 99);
 
-	sprintf(text,"VICTOIRE ROYALE\n%s a gagné",winner->name);
+	sprintf(text,"VICTOIRE ROYALE\n%s a gange",winner->name);
 	print(pt,text,WHITE);
 
 	render();
@@ -291,7 +280,8 @@ void printLeaderboard(){
 	SDL_RenderClear(renderer);
 	backgroundColor(222, 49, 99);
 
-	char score[1000] = {0};
+	char score[MAXCHAR] = {0};
+
 
 	print(pt, "Leaderboard", WHITE);
 
@@ -305,5 +295,12 @@ void printLeaderboard(){
 	}
 
 	render();
+
+	pt.x = 100;
+	pt.y = 100;
+
+	do{
+		waitClick(&pt);
+	} while(pt.x > 50 && pt.y > 50);
 
 }

@@ -3,16 +3,20 @@
 
 int firstMenu(Game * game) {
 	int mode = 0;
-	mode = selectMode();
 
-	switch (mode) {
-		case 3:
+	do{
+		mode = selectMode();
 
-			break;
-		default:
-			getPlayerName(game, mode);
-			break;
-	}
+		switch (mode) {
+			case 3:
+				printLeaderboard();
+				break;
+			default:
+				printf("mode %d\n", mode);
+				getPlayerName(game, mode);
+				break;
+		}
+	} while(mode > 2 && mode != 0);
 
 	return mode;
 }
