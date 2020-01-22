@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "../utils/utils.h"
 #include "../model/game.h"
+#include "../controler/save.h"
 
 
 #define WINDOW_WIDTH 800
@@ -48,3 +49,6 @@ void updateBoard(Game * game);
 void displayPlayerName(Game * game);
 void print_hover_cell(Point coord);
 void print_score(Player * player);
+
+void VictoryScreen (Player * winner);
+void printLeaderboard();

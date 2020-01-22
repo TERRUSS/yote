@@ -1,8 +1,24 @@
 CC=gcc
 CFLAGS=-Wall
 LIBS=-lSDL2 -lSDL2_image -lSDL2_ttf -lm
-FILES=src/main.c src/vue/graphics.c src/vue/utils.c src/utils/utils.c src/model/game.c src/controler/inputs.c src/controler/game.c src/vue/menu.c src/model/ia.c
-HEADERS=src/main.h src/vue/graphics.h src/vue/utils.h src/utils/utils.h src/model/game.h src/controler/inputs.h src/controler/game.h src/vue/menu.h src/model/ia.h
+
+FILES_MODEL=src/model/game.c src/model/ia.c
+FILESH_MODEL=src/model/game.h src/model/ia.h
+FILES_VUE=src/vue/graphics.c src/vue/utils.c src/vue/menu.c
+FILESH_VUE=src/vue/graphics.h src/vue/utils.h src/vue/menu.h
+FILES_CONTROLER=src/controler/inputs.c src/controler/game.c src/controler/save.c
+FILESH_CONTROLER=src/controler/inputs.h src/controler/game.h src/controler/save.h
+
+FILES_UTILS=src/utils/utils.c
+FILESH_UTILS=src/utils/utils.h
+
+
+FILES=src/main.c
+HEADERS=src/main.h
+
+FILES += $(FILES_MODEL) $(FILES_VUE) $(FILES_CONTROLER) $(FILES_UTILS)
+HEADERS += $(FILESH_MODEL) $(FILESH_VUE) $(FILESH_CONTROLER) $(FILESH_UTILS)
+
 DIR=build
 
 

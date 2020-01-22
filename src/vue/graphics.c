@@ -263,3 +263,47 @@ void displayPlayerName(Game * game){
 	}
 	print(pt,text,WHITE);
 }
+
+
+/*******************************************/
+
+void VictoryScreen (Player * winner) {
+	Point pt = {WINDOW_WIDTH/3, WINDOW_HEIGHT/3};
+	char text[1000] = {0};
+
+	SDL_RenderClear(renderer);
+	backgroundColor(222, 49, 99);
+
+	sprintf(text,"VICTOIRE ROYALE\n%s a gagné",winner->name);
+	print(pt,text,WHITE);
+
+	render();
+
+	Point ok;
+	waitClick(&ok);
+}
+
+
+void printLeaderboard(){
+
+	Point pt = {WINDOW_WIDTH/3, 50};
+
+	SDL_RenderClear(renderer);
+	backgroundColor(222, 49, 99);
+
+	char score[1000] = {0};
+
+	print(pt, "Leaderboard", WHITE);
+
+	int i = 0;
+	pt.x = 50;
+	pt.y = 100;
+	while(readScore(i, score) && i<10){
+		pt.y += 50;
+		print(pt, score, WHITE);
+		i++;
+	}
+
+	render();
+
+}

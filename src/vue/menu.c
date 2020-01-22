@@ -23,7 +23,7 @@ void recordText(char * input, Point inputPosition) {
 	SDL_StartTextInput();
 
 	char rep[LEN_MAX + 1] = {0};
-	size_t len = 0;
+	int len = 0;
 	SDL_Event event;
 
 	Point position;
@@ -47,9 +47,14 @@ void recordText(char * input, Point inputPosition) {
 
 		else if( event.type == SDL_KEYDOWN) {
 
-			if(event.key.keysym.sym == SDLK_BACKSPACE && len) {
-				rep[len - 1] = 0;
-				len--;
+			if(event.key.keysym.sym == SDLK_BACKSPACE) {
+
+				if (len > 0) {
+					len--;
+				}
+
+				rep[len] = 0;
+
 				has_type = SDL_TRUE;
 			}
 
@@ -78,8 +83,10 @@ void recordText(char * input, Point inputPosition) {
 			has_type = SDL_TRUE;
 		}
 		if(has_type) {
-
-			print(inputPosition, rep, WHITE);
+			printf("%s : %d\n", rep, len);
+			if (rep[0]){
+				print(inputPosition, rep, WHITE);
+			}
 
 			render();
 		}

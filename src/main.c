@@ -20,9 +20,8 @@ int main(void) {
 
 	/*---------------- CONGRATULATION ----------------*/
 
-	printf("The winner is : %s score : %d\n", winner->name,winner->score);
+	VictoryScreen( winner );
 	// saveScore(winner);
-	//VictoryScreen( winner );
 
 	quitGraphics();
 

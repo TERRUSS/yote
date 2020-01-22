@@ -2,7 +2,7 @@
 #include "game.h"
 
 Player * gameLoop (Game * game, int mode) {
-	int version = 0;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
+	int version = 1;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
 	Point click;
 	int inGame = 1;
 	Player * winner;
@@ -18,7 +18,7 @@ Player * gameLoop (Game * game, int mode) {
 
 			if(mode == 2 && game->currentPlayer == BLACK ){
 				play_ia(game);
-				
+
 				updateBoard(game);
 				render();
 			}else{
