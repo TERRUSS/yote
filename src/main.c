@@ -21,7 +21,7 @@ int main(void) {
 	/*---------------- CONGRATULATION ----------------*/
 
 	printf("The winner is : %s score : %d\n", winner->name,winner->score);
-	saveScore(winner);
+	// saveScore(winner);
 	//VictoryScreen( winner );
 
 	quitGraphics();

@@ -7,7 +7,7 @@ void saveScore (Player * winner) {
 	// open the file for writing
 	score = fopen("../.scores","w");
 	for (int i = 0; i < 5; i++) {
-		tab[i]=
+		readScore(i,tab[i]);
 	}
 	fprintf(score, "%s; %d", white->name, white->score);
 
