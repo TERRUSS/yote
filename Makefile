@@ -1,11 +1,12 @@
 CC=gcc
+WIN64CC=i686-w64-mingw32-gcc
 CFLAGS=-Wall
-LIBS=-lSDL2 -lSDL2_image -lSDL2_ttf -lm
+LIBS=-lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm
 
 FILES_MODEL=src/model/game.c src/model/ia.c
 FILESH_MODEL=src/model/game.h src/model/ia.h
 FILES_VUE=src/vue/graphics.c src/vue/utils.c src/vue/menu.c
-FILESH_VUE=src/vue/graphics.h src/vue/utils.h src/vue/menu.h
+FILESH_VUE=src/vue/graphics.h src/vue/utils.h src/vue/menu.h src/vue/music.h
 FILES_CONTROLER=src/controler/inputs.c src/controler/game.c src/controler/save.c
 FILESH_CONTROLER=src/controler/inputs.h src/controler/game.h src/controler/save.h
 
@@ -24,6 +25,9 @@ DIR=build
 
 yote: $(FILES) $(HEADERS)
 	$(CC) $(CFLAGS) $(FILES) -o yote $(LIBS)
+
+winyote: $(FILES) $(HEADERS)
+	$(WIN64CC) $(CFLAGS) $(FILES) -o winyote $(LIBS)
 
 tar: clean
 	rm -rf $(DIR)

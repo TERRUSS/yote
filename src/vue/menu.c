@@ -106,12 +106,12 @@ void recordText(char * input, Point inputPosition) {
 int selectMode (){
 
 	Point click;
-	Point JvJ,JvIA,score;
+	Point JvJ,JvIA,score, quit;
 	int check = 0;
 
 	SDL_RenderClear(renderer);
 	// backgroundColor(222, 49, 99);
-	backgroundImage(0);
+	backgroundImage(MENU);
 	SDL_SetRenderDrawColor(renderer, 222, 49, 99, 255);
 	SDL_Rect rectangle;
 	rectangle.w = BTN_WIDTH;
@@ -136,9 +136,17 @@ int selectMode (){
 	rectangle.y = score.y;
 	// SDL_RenderFillRect(renderer, &rectangle);
 
+	quit.x = WINDOW_WIDTH - 300;
+	quit.y = 450;
+	printf("QUIT %d %d\n", quit.x, quit.y);
+	rectangle.x = quit.x;
+	rectangle.y = quit.y;
+	// SDL_RenderFillRect(renderer, &rectangle);
+
 	print_button(JvJ, JVJ);
 	print_button(JvIA, JVIA);
 	print_button(score, SCORE);
+	print_button(quit, QUIT);
 	render();
 
 	do {
@@ -150,6 +158,8 @@ int selectMode (){
 			check = 2;
 		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 400 + rectangle.h )&&(click.y >= 400 ))) {
 			check = 3;
+		}else if (((click.x <= quit.x + rectangle.w/2 )&&(click.x >= quit.x ))&&((click.y <= 400 + rectangle.h/2 )&&(click.y >= 400 ))) {
+			quitGraphics();
 		}
 	} while(check == 0);
 
@@ -165,7 +175,7 @@ void getPlayerName (Game * game, int mode){
 	int select;
 
 	SDL_RenderClear(renderer);
-	backgroundImage(0);
+	backgroundImage(MENU);
 	// backgroundColor(222, 49, 99);
 
 	j1.x = 20; j1.y = 50;

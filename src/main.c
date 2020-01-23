@@ -9,6 +9,7 @@ int main(void) {
 
 	do {
 		initGame( &game );
+		initMusic();
 		// welcome menu - players setup
 		int mode = firstMenu(&game);
 

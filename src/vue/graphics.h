@@ -20,7 +20,8 @@
 
 #define BTN_WIDTH 400
 #define BTN_HEIGHT 130
-enum {JVJ, JVIA, SCORE, BACK};
+enum {JVJ, JVIA, SCORE, BACK, QUIT};
+enum {MENU, GAME, VICTOIRE1, VICTOIRE2};
 
 #define HIT_BOX_WIDTH 51
 #define HIT_BOX_HEIGHT 53
@@ -39,9 +40,12 @@ SDL_Surface* btn_jvj;
 SDL_Surface* btn_jvia;
 SDL_Surface* btn_score;
 SDL_Surface* btn_back;
+SDL_Surface* btn_quit;
 
 SDL_Surface* menubg;
-SDL_Surface* btn_back;
+SDL_Surface* boardbg;
+SDL_Surface* winbg1;
+SDL_Surface* winbg2;
 
 SDL_Renderer* renderer; // Création d'un SDL_Renderer (pour l'accélération matérielle)
 TTF_Font *font;

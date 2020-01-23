@@ -28,6 +28,21 @@ void waitClick(Point * point){
 	}
 }
 
+int waitClick_pulling(){
+	//int x, y;
+	SDL_Event event;
+
+	SDL_PollEvent(&event);
+
+	switch (event.type) {
+		case SDL_MOUSEBUTTONDOWN:
+			if (SDL_BUTTON(1) ) {
+				return 1;
+			}
+	}
+	return 0;
+}
+
 int isInBoard_coord(Point mouse_pos){
 	Point point = isoToCart(mouse_pos);
 	if (point.x >=0 && point.x < CELL_R && point.y >=0 && point.y < CELL_C){

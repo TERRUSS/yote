@@ -6,6 +6,7 @@
 
 
 void waitClick(Point * point);
+int waitClick_pulling();
 void mouvPawn_hugo(Game * game, Point position);
 
 int isInBoard(Point mouse_pos);

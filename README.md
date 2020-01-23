@@ -10,7 +10,7 @@
 
 ```bash
 $ # install dependencies
-$ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+$ sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
 $ # clone & build
 $ git install "https://github.com/TERRUSS/yote" && cd yote && make
 $ # exectutable is now at ./yote

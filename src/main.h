@@ -2,6 +2,7 @@
 
 #include "vue/graphics.h"
 #include "vue/menu.h"
+#include "vue/music.h"
 
 #include "model/game.h"
 
