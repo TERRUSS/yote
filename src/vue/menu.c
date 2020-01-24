@@ -14,6 +14,7 @@ int firstMenu(Game * game) {
 			default:
 				printf("mode %d\n", mode);
 				getPlayerName(game, mode);
+				selectVersion(game);
 				break;
 		}
 	} while(mode > 2 && mode != 0);
@@ -30,7 +31,7 @@ void recordText(char * input, Point inputPosition) {
 	int len = 0;
 	SDL_Event event;
 
-	Point position;
+	//Point position;
 
 	while(1) {
 		// clear screen
@@ -138,7 +139,7 @@ int selectMode (){
 
 	quit.x = WINDOW_WIDTH - 300;
 	quit.y = 450;
-	printf("QUIT %d %d\n", quit.x, quit.y);
+	//printf("QUIT %d %d\n", quit.x, quit.y);
 	rectangle.x = quit.x;
 	rectangle.y = quit.y;
 	// SDL_RenderFillRect(renderer, &rectangle);
@@ -146,7 +147,7 @@ int selectMode (){
 	print_button(JvJ, JVJ);
 	print_button(JvIA, JVIA);
 	print_button(score, SCORE);
-	print_button(quit, QUIT);
+	//print_button(quit, QUIT);
 	render();
 
 	do {
@@ -158,9 +159,9 @@ int selectMode (){
 			check = 2;
 		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 400 + rectangle.h )&&(click.y >= 400 ))) {
 			check = 3;
-		}else if (((click.x <= quit.x + rectangle.w/2 )&&(click.x >= quit.x ))&&((click.y <= 400 + rectangle.h/2 )&&(click.y >= 400 ))) {
+		}/*else if (((click.x <= quit.x + rectangle.w/2 )&&(click.x >= quit.x ))&&((click.y <= 400 + rectangle.h/2 )&&(click.y >= 400 ))) {
 			quitGraphics();
-		}
+		}*/
 	} while(check == 0);
 
 	return check;
@@ -169,10 +170,10 @@ int selectMode (){
 
 void getPlayerName (Game * game, int mode){
 
-	Point click;
+	//Point click;
 	Point j1, j2;
 
-	int select;
+	//int select;
 
 	SDL_RenderClear(renderer);
 	backgroundImage(MENU);
@@ -203,4 +204,50 @@ void getPlayerName (Game * game, int mode){
 	if (mode == 1) {
 		printf("Black player name : %s\n", game->black.name);
 	}
+}
+
+void selectVersion(Game * game){
+	Point click;
+	Point v1,v2;
+	int quit=0;
+
+
+	SDL_RenderClear(renderer);
+	// backgroundColor(222, 49, 99);
+	backgroundImage(MENU);
+	SDL_SetRenderDrawColor(renderer, 222, 49, 99, 255);
+	SDL_Rect rectangle;
+	rectangle.w = BTN_WIDTH;
+	rectangle.h = BTN_HEIGHT;
+
+
+	v1.x = 20;
+	v1.y = 100;
+	rectangle.x = v1.x;
+	rectangle.y = v1.y;
+	//SDL_RenderFillRect(renderer, &rectangle);
+
+	v2.x = 20;
+	v2.y = 250;
+	rectangle.x = v2.x;
+	rectangle.y = v2.y;
+	//SDL_RenderFillRect(renderer, &rectangle);
+
+	print_button(v1, V1);
+	print_button(v2, V2);
+	render();
+
+	click.x = -1;click.y=-1;
+	do {
+		waitClick(&click);
+
+		if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 100 + rectangle.h )&&(click.y >= 100 ))) {
+			game->version = 0;
+			quit = 1;
+		}else if (((click.x <= 20 + rectangle.w )&&(click.x >= 20 ))&&((click.y <= 250 + rectangle.h )&&(click.y >= 200 ))) {
+			game->version = 1;
+			quit = 1;
+		}
+
+	} while(!quit);
 }

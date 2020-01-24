@@ -33,6 +33,7 @@ void initGame(Game * game){
     game->white = newplayer;
 
     game->round = 0;
+    game->version = 1;
 
 }
 int checkVictory(int version,Game * game){
@@ -96,7 +97,7 @@ void resetBoardAccessibility(Game * game){
 void setBoardAccessibility(Game * game,Point point){
   int tuple[4][2] = {{0,1},{1,0},{-1,0},{0,-1}};
 	int state,color;
-  Point p;
+  Point p,p_eat;
   Player * player = NULL;
 
   if(game->currentPlayer == BLACK)
@@ -120,7 +121,9 @@ void setBoardAccessibility(Game * game,Point point){
   		}else if(state == FILL && color != game->currentPlayer){
   			//Si la case est rempli par un pion d'un autre joueur
   			//il peut la manger si la case derrière est VIDE
-  			if(game->board[p.x+tuple[i][0]][p.y+tuple[i][1]].state == EMPTY){
+        p_eat.x = p.x+tuple[i][0];
+        p_eat.y = p.y+tuple[i][1];
+  			if( isInBoard(p_eat) && game->board[p_eat.x][p_eat.y].state == EMPTY){
   				game->board[p.x+tuple[i][0]][p.y+tuple[i][1]].state = ACCESSIBLE;
   			}
   		}

@@ -2,7 +2,7 @@
 #include "game.h"
 
 Player * gameLoop (Game * game, int mode) {
-	int version = 1;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
+	int version = game->version;//version 0 = version simple plus de pions - version = 1 plus de pions sur le plateau
 	Point click;
 	int inGame = 1;
 	Player * winner;

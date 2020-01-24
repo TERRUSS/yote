@@ -20,12 +20,12 @@ void saveScore (Player * winner) {
 
 	// printf("\n\n");
 
-		//rewrite the file
+	//rewrite the file
 	scoreFile = fopen("./.scores","w");
 
 	int inserted = 0;
 
-
+	printf("%d\n",i);
 
 	for (int k = 0; k < i && k < 10; k++) {
 		if (winner->score >= leaderBoard[k].score && !inserted){
@@ -39,9 +39,11 @@ void saveScore (Player * winner) {
 			fprintf(scoreFile, "%s;%d\n", leaderBoard[k].name, leaderBoard[k].score);
 		}
 	}
-	if (i == 0) {
+	//Si il y a moins de 10 lignes et que l'on a pas ajouter le score l'ajoute
+	if (i < 10 && !inserted) {
 		fprintf(scoreFile, "%s;%d\n", winner->name, winner->score);
 	}
+
 	// close the file
 	fclose(scoreFile);
 }

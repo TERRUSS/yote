@@ -15,3 +15,4 @@ int firstMenu(Game * game);
 void recordText(char * input, Point inputPosition);
 int selectMode ();
 void getPlayerName (Game * game, int mode);
+void selectVersion(Game * game);

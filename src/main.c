@@ -16,9 +16,9 @@ int main(void) {
 		game.currentPlayer = pickPlayer();
 
 		/*---------------- GAME LOOP ----------------*/
-
-			Player * winner = gameLoop(&game,mode);
-			printf("The winner is : %s score : %d\n",winner->name,winner->score);
+		
+		Player * winner = gameLoop(&game,mode);
+		printf("The winner is : %s score : %d\n",winner->name,winner->score);
 
 		/*---------------- CONGRATULATION ----------------*/
 

@@ -43,6 +43,8 @@ void initGraphics(){
 	btn_score = IMG_Load("./src/assets/buttons/score.png");
 	btn_back = IMG_Load("./src/assets/buttons/back.png");
 	btn_quit = IMG_Load("./src/assets/buttons/quit.png");
+	btn_v1 = IMG_Load("./src/assets/buttons/v1.png");
+	btn_v2 = IMG_Load("./src/assets/buttons/v2.png");
 
 	if ( cell_sprite_blue && cell_sprite_red && white_pawn_sprite && black_pawn_sprite ) {
 		printLog(LOGGING_STEP, "Assets Loaded");
@@ -342,6 +344,12 @@ void print_button(Point pt, int type){
 		case BACK:
 			pTexture = SDL_CreateTextureFromSurface(renderer, btn_back);
 			break;
+		case V1:
+			pTexture = SDL_CreateTextureFromSurface(renderer, btn_v1);
+			break;
+		case V2:
+			pTexture = SDL_CreateTextureFromSurface(renderer, btn_v2);
+			break;
 		case QUIT:
 			pTexture = SDL_CreateTextureFromSurface(renderer, btn_quit);
 			width /=1.5;
@@ -408,6 +416,9 @@ void printLeaderboard(){
 	backgroundImage(MENU);
 
 	char score[MAXCHAR] = {0};
+	char tmp_name[MAXCHAR];
+	char tmp_score[MAXCHAR];
+	int y = 0, offset = 0;
 
 
 	print(pt, "Leaderboard", WHITE);
@@ -417,7 +428,24 @@ void printLeaderboard(){
 	pt.y = 100;
 	while(readScore(i, score) && i<10){
 		pt.y += 50;
-		print(pt, score, WHITE);
+		y = 0;offset = 0;
+
+		while (score[y] != ';') {
+			tmp_name[y] = score[y];
+			y++;
+		}
+		tmp_name[y] = '\0';
+		y++;
+		offset = y;
+		while (score[y] != '\n' && score[y] != '\0') {
+			tmp_score[y-offset] = score[y];
+			y++;
+		}
+
+		print(pt, tmp_name, WHITE);
+		pt.x+=MAXCHAR;
+		print(pt, tmp_score, WHITE);
+		pt.x-=MAXCHAR;
 		i++;
 	}
 
@@ -426,11 +454,11 @@ void printLeaderboard(){
 
 	render();
 
-	pt.x = -1;
-	pt.y = -1;
-
+	Point click;
+	click.x = -1;
+	click.y = -1;
 	do{
-		waitClick(&pt);
-	} while(pt.x < 0 && pt.y < 0);
+		waitClick(&click);
+	} while(!(click.x > 10 && click.x < BTN_WIDTH/2 && click.y < BTN_HEIGHT/2 && click.y > 10));
 
 }
