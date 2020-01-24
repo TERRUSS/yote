@@ -441,6 +441,7 @@ void printLeaderboard(){
 			tmp_score[y-offset] = score[y];
 			y++;
 		}
+		tmp_score[y-offset] = '\0';
 
 		print(pt, tmp_name, WHITE);
 		pt.x+=MAXCHAR;
