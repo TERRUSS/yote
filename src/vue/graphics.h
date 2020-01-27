@@ -20,7 +20,7 @@
 
 #define BTN_WIDTH 400
 #define BTN_HEIGHT 130
-enum {JVJ, JVIA, SCORE, BACK, QUIT};
+enum {JVJ, JVIA, SCORE, BACK, QUIT,V1,V2};
 enum {MENU, GAME, VICTOIRE1, VICTOIRE2};
 
 #define HIT_BOX_WIDTH 51
@@ -41,6 +41,8 @@ SDL_Surface* btn_jvia;
 SDL_Surface* btn_score;
 SDL_Surface* btn_back;
 SDL_Surface* btn_quit;
+SDL_Surface* btn_v1;
+SDL_Surface* btn_v2;
 
 SDL_Surface* menubg;
 SDL_Surface* boardbg;

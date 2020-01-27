@@ -31,6 +31,7 @@ typedef struct {
 	int round;
 	Cell board[CELL_R][CELL_C];
 	int currentPlayer;
+	int version;
 } Game;
 
 
