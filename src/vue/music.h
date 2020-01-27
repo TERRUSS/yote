@@ -1,7 +1,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_mixer.h"
 
-static const char *MY_COOL_MP3 = "./src/assets/nightcall.mp3";
+static const char *MY_COOL_MP3 = "./src/assets/lofi_2.mp3";
 Mix_Music *music;
 
 void initMusic() {
